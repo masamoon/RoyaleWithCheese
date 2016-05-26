@@ -45,7 +45,6 @@ Partial Class MainForm
         Me.MyRatingLabel = New System.Windows.Forms.Label()
         Me.OverallRatingLabel = New System.Windows.Forms.Label()
         Me.SeeReviewButton = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
@@ -282,25 +281,16 @@ Partial Class MainForm
         '
         'SeeReviewButton
         '
-        Me.SeeReviewButton.Location = New System.Drawing.Point(595, 455)
+        Me.SeeReviewButton.Location = New System.Drawing.Point(548, 455)
         Me.SeeReviewButton.Name = "SeeReviewButton"
         Me.SeeReviewButton.Size = New System.Drawing.Size(75, 39)
         Me.SeeReviewButton.TabIndex = 20
         Me.SeeReviewButton.Text = "See Review"
         Me.SeeReviewButton.UseVisualStyleBackColor = True
         '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(428, 455)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(97, 39)
-        Me.Button1.TabIndex = 21
-        Me.Button1.Text = "Cast and Crew"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(303, 455)
+        Me.Button2.Location = New System.Drawing.Point(353, 455)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 39)
         Me.Button2.TabIndex = 22
@@ -405,7 +395,7 @@ Partial Class MainForm
         Me.TabPage5.Location = New System.Drawing.Point(4, 22)
         Me.TabPage5.Name = "TabPage5"
         Me.TabPage5.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage5.Size = New System.Drawing.Size(392, 126)
+        Me.TabPage5.Size = New System.Drawing.Size(392, 22)
         Me.TabPage5.TabIndex = 1
         Me.TabPage5.Text = "Friends"
         Me.TabPage5.UseVisualStyleBackColor = True
@@ -424,7 +414,7 @@ Partial Class MainForm
         Me.TabPage6.Location = New System.Drawing.Point(4, 22)
         Me.TabPage6.Name = "TabPage6"
         Me.TabPage6.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage6.Size = New System.Drawing.Size(392, 126)
+        Me.TabPage6.Size = New System.Drawing.Size(392, 22)
         Me.TabPage6.TabIndex = 2
         Me.TabPage6.Text = "Subscriptions"
         Me.TabPage6.UseVisualStyleBackColor = True
@@ -532,7 +522,6 @@ Partial Class MainForm
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
-        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.SeeReviewButton)
         Me.Controls.Add(Me.OverallRatingLabel)
         Me.Controls.Add(Me.MyRatingLabel)
@@ -587,7 +576,6 @@ Partial Class MainForm
     Friend WithEvents MyRatingLabel As Label
     Friend WithEvents OverallRatingLabel As Label
     Friend WithEvents SeeReviewButton As Button
-    Friend WithEvents Button1 As Button
     Friend WithEvents Button2 As Button
     Friend WithEvents Button3 As Button
     Friend WithEvents Button4 As Button

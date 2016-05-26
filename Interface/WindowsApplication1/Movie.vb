@@ -82,12 +82,13 @@ Public Class Movie
         End Set
     End Property
 
-    Private _genres As String
-    Public Property genres() As String
+    Private _genres As List(Of String)
+
+    Public Property genres() As List(Of String)
         Get
             Return _genres
         End Get
-        Set(value As String)
+        Set(value As List(Of String))
             _genres = value
         End Set
     End Property
@@ -106,21 +107,17 @@ Public Class Movie
         Dim CN As New SqlConnection(Globals.connectionPath)
         Dim CMD As New SqlCommand
         CMD.Connection = CN
-        CMD.CommandText = "select dbo.GetGenre(@movie_id)"
+        CMD.CommandText = "Select * FROM dbo.GetGenre(@movie_id)"
         CMD.CommandType = CommandType.Text
         CMD.Parameters.Add(New SqlParameter("@movie_id", _movie_id))
-        Dim genre As String
-        genre = ""
-        Try
-            CN.Open()
-            If CN.State = ConnectionState.Open Then
-                genre += CMD.ExecuteScalar
-            End If
-        Catch ex As Exception
-            MsgBox("ExecQuery Error: " & vbNewLine & ex.Message)
-        End Try
-        _genres = genre
-
+        Dim genres As New List(Of String)
+        CN.Open()
+        Dim RDR1 As SqlDataReader
+        RDR1 = CMD.ExecuteReader
+        While RDR1.Read
+            genres.Add(RDR1.Item("genre_name"))
+        End While
+        _genres = genres
         If CN.State = ConnectionState.Open Then
             CN.Close()
         End If
@@ -128,7 +125,7 @@ Public Class Movie
     End Function
 
     Overrides Function ToString() As String
-        If String.IsNullOrEmpty(_genres) Then
+        If _genres Is Nothing Then
             getGenres()
         End If
         If _user_rating = 0 Then

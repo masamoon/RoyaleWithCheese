@@ -183,12 +183,15 @@ Public Class MainForm
         synbioTextBox.Show()
         PosterBox.Show()
         yearLabel.Show()
+        GenresLabel.Text = ""
         GenresLabel.Show()
         If ListBox1.Items.Count <= 0 Then Exit Sub
         nameLabel.Text = tmpMovie.title
         yearLabel.Text = tmpMovie.year
         synbioTextBox.Text = tmpMovie.synopsis
-        GenresLabel.Text = tmpMovie.genres
+        For Each genre As String In tmpMovie.genres
+            GenresLabel.Text += genre & " | "
+        Next genre
         PosterBox.SizeMode = PictureBoxSizeMode.StretchImage
         If Not String.IsNullOrEmpty(tmpMovie.poster) Then
             PosterBox.ImageLocation = tmpMovie.poster
@@ -208,9 +211,8 @@ Public Class MainForm
         GenresLabel.Hide()
         RuntimeTextBox.Clear()
         CountryTextBox.Clear()
-    End Sub MySub()
 
-End Sub
+    End Sub
 
     Private Sub showUsr()
         hideMovie()
@@ -342,8 +344,13 @@ End Sub
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Globals.shared_movie = ListBox1.SelectedItem
-        Globals.fromMain = True
+        If TabControl1.SelectedIndex = 0 Then
+            Globals.shared_movie = ListBox1.SelectedItem
+        Else
+            Globals.shared_movie = ListBox4.SelectedItem
+        End If
+
+        Globals.lastForm = "MainForm"
         Hide()
         MoviePage.Show()
     End Sub
