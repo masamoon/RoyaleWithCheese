@@ -1,0 +1,80 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+WindowsApplication1
+</name>
+</assembly>
+<members>
+<member name="T:WindowsApplication1.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:WindowsApplication1.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:WindowsApplication1.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="P:WindowsApplication1.My.Resources.Resources.countries">
+<summary>
+  Looks up a localized string similar to Afghanistan  
+Albania  
+Algeria  
+Andorra  
+Angola  
+Antarctica  
+Antigua and Barbuda  
+Argentina  
+Armenia  
+Aruba  
+Australia  
+Austria  
+Azerbaijan  
+Bahamas  
+Bahrain  
+Bangladesh  
+Barbados  
+Belarus  
+Belgium  
+Belize  
+Benin  
+Bhutan  
+Bolivia  
+Bosnia and Herzegovina  
+Botswana  
+Brazil  
+Brunei  
+Bulgaria  
+Burkina Faso  
+Burundi  
+Cambodia  
+Cameroon  
+Canada  
+Canary Islands  
+Cape Verde Islands  
+Cayman islands  
+Central African Republic  
+Chad  
+Chile  
+Ch [rest of string was truncated]&quot;;.
+</summary>
+</member>
+<member name="P:WindowsApplication1.My.Resources.Resources.interstellar">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:WindowsApplication1.My.Resources.Resources.pulpfiction">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+</members>
+</doc>
