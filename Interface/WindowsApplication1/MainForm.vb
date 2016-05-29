@@ -12,6 +12,9 @@ Public Class MainForm
     Private tmpUserFromFriend As Usr
     Private tmpFilmmakerFromFriend As Filmmaker
 
+    Private idx As New Integer
+    Private mine As Boolean
+
     Private Sub MainForm_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
         Login.Show()
         ListBox2.ScrollAlwaysVisible = True
@@ -19,7 +22,11 @@ Public Class MainForm
         ListBox3.Items.Clear()
     End Sub
 
-    Private Sub getContent(ByVal sender As Object, ByVal e As EventArgs)
+    Public Sub getContent(ByVal sender As Object, ByVal e As EventArgs)
+        If CN.State = ConnectionState.Open Then
+            CN.Close()
+            ClearConnection()
+        End If
         CN.Open()
         ListBox1.Items.Clear()
         ListBox1.ScrollAlwaysVisible = True
@@ -41,6 +48,8 @@ Public Class MainForm
             m.poster = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("poster")), "", RDR1.Item("poster")))
             m.runtime = RDR1.Item("runtime")
             m.year = RDR1.Item("year")
+            m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            m.user_review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
             ListBox1.Items.Add(m)
         End While
         RDR1.Close()
@@ -83,13 +92,18 @@ Public Class MainForm
         If ListBox3.Items.Count > 0 Then
             ListBox3.SelectedIndex = 0
         End If
+        hideUsr()
+        showMovie()
 
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
         If ListBox1.SelectedIndex > -1 Then
             tmpMovie = ListBox1.SelectedItem
-            ShowMovie()
+            Globals.user.rating = tmpMovie.user_rating
+            Globals.user.review = tmpMovie.user_review
+            Globals.shared_movie = tmpMovie
+            showMovie()
         End If
     End Sub
     Private Sub ListBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox2.SelectedIndexChanged
@@ -108,6 +122,13 @@ Public Class MainForm
     Private Sub ListBox4_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox4.SelectedIndexChanged
         If ListBox4.SelectedIndex > -1 Then
             tmpMovieFromFriend = ListBox4.SelectedItem
+
+            tmpUsr.rating = tmpMovieFromFriend.user_rating
+            tmpUsr.review = tmpMovieFromFriend.user_review
+
+            FriendsRatingBox.Text = tmpMovieFromFriend.user_rating
+            Globals.shared_movie = tmpMovieFromFriend
+
             showMovieFromFriend()
         End If
     End Sub
@@ -127,11 +148,15 @@ Public Class MainForm
 
     Private Sub TabControl1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
         If TabControl1.SelectedIndex = 0 Then
+            hideUsr()
+            showMovie()
             If ListBox1.Items.Count > 0 Then
                 ListBox1.SetSelected(0, True)
             End If
         End If
         If TabControl1.SelectedIndex = 1 Then
+            hideMovie()
+            showUsr()
             If ListBox2.Items.Count > 0 Then
                 ListBox2.SetSelected(0, True)
             End If
@@ -180,6 +205,9 @@ Public Class MainForm
 
     Private Sub showMovie()
         hideUsr()
+        MyRatingLabel.Show()
+        MyRatingTextBox.Show()
+        UpdateReviewButton.Show()
         synbioTextBox.Show()
         PosterBox.Show()
         yearLabel.Show()
@@ -202,6 +230,7 @@ Public Class MainForm
         End If
         RuntimeTextBox.Text = tmpMovie.runtime & " min"
         CountryTextBox.Text = tmpMovie.country
+        MyRatingTextBox.Text = tmpMovie.user_rating
     End Sub
 
     Private Sub hideMovie()
@@ -211,7 +240,9 @@ Public Class MainForm
         GenresLabel.Hide()
         RuntimeTextBox.Clear()
         CountryTextBox.Clear()
-
+        MyRatingTextBox.Hide()
+        MyRatingLabel.Hide()
+        UpdateReviewButton.Hide()
     End Sub
 
     Private Sub showUsr()
@@ -222,7 +253,6 @@ Public Class MainForm
         LocationLabel.Show()
         LocationBox.Show()
         TabControl2.Show()
-        SeeFriendsProfileButton.Show()
         FriendsRatingLabel.Show()
         FriendsRatingBox.Show()
         If ListBox2.Items.Count <= 0 Then Exit Sub
@@ -247,6 +277,8 @@ Public Class MainForm
     End Sub
 
     Private Sub showMovieFromFriend()
+        RuntimeTextBox.Text = tmpMovieFromFriend.runtime & "min"
+        CountryTextBox.Text = tmpMovieFromFriend.country
 
     End Sub
 
@@ -276,9 +308,11 @@ Public Class MainForm
             m.poster = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("poster")), "", RDR1.Item("poster")))
             m.runtime = RDR1.Item("runtime")
             m.year = RDR1.Item("year")
-            m.user_rating = RDR1.Item("rating")
+            m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            m.user_review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
             ListBox4.Items.Add(m)
         End While
+
         RDR1.Close()
 
         CMD.CommandText = "SELECT * FROM FriendList join Usr on FriendList.user_id = Usr.id OR FriendList.user_id_friend = Usr.id
@@ -332,6 +366,10 @@ Public Class MainForm
         If ListBox1.Items.Count > 0 Then
             ListBox1.SetSelected(0, True)
         End If
+        SearchComboBox.Items.Add("Movies")
+        SearchComboBox.Items.Add("Users")
+        SearchComboBox.Items.Add("Filmmakers")
+        SearchComboBox.SelectedIndex = 0
     End Sub
 
     Private Sub ClearConnection()
@@ -346,12 +384,103 @@ Public Class MainForm
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         If TabControl1.SelectedIndex = 0 Then
             Globals.shared_movie = ListBox1.SelectedItem
+            idx = ListBox1.SelectedIndex
+            mine = True
         Else
             Globals.shared_movie = ListBox4.SelectedItem
+            idx = ListBox4.SelectedIndex
+            mine = False
         End If
-
         Globals.lastForm = "MainForm"
-        Hide()
-        MoviePage.Show()
+        Me.Hide()
+        Dim mpage As New MoviePage
+        mpage.Show()
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Me.Close()
+        Login.Show()
+        ListBox2.ScrollAlwaysVisible = True
+        ListBox2.HorizontalScrollbar = True
+        ListBox3.Items.Clear()
+    End Sub
+
+    Private Sub MyRatingTextBox_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles MyRatingTextBox.KeyPress
+        If (Microsoft.VisualBasic.Asc(e.KeyChar) < 48) _
+                  Or (Microsoft.VisualBasic.Asc(e.KeyChar) > 57) Then
+            e.Handled = True
+        End If
+        If (Microsoft.VisualBasic.Asc(e.KeyChar) = 8) Then
+            e.Handled = False
+        End If
+    End Sub
+
+    Private Sub SeeReviewButton_Click(sender As Object, e As EventArgs) Handles SeeReviewButton.Click
+
+        Dim rev As Review
+        If TabControl1.SelectedIndex = 0 Then
+            rev = New Review(Globals.user)
+            idx = ListBox1.SelectedIndex
+            mine = True
+        Else
+            rev = New Review(tmpUsr)
+            idx = ListBox4.SelectedIndex
+            mine = False
+        End If
+        rev.Show()
+    End Sub
+
+    Private Sub UpdateReviewButton_Click(sender As Object, e As EventArgs) Handles UpdateReviewButton.Click
+        ClearConnection()
+        Dim tmp As New Integer
+        tmp = ListBox1.SelectedIndex
+        CN.Open()
+        CMD.CommandText = "SELECT dbo.WroteReview(@movie_id, @user_id)"
+        CMD.Parameters.Add(New SqlParameter("@movie_id", Globals.shared_movie.movie_id))
+        CMD.Parameters.Add(New SqlParameter("@user_id", Globals.user.id))
+        Dim accept As Integer
+        accept = CMD.ExecuteScalar
+        If accept = 1 Then
+            CMD.CommandText = "UPDATE Review SET rating = @rating WHERE user_id = @uid AND movie_id = @mid"
+            CMD.Parameters.Add(New SqlParameter("@mid", Globals.shared_movie.movie_id))
+            CMD.Parameters.Add(New SqlParameter("@uid", Globals.user.id))
+            CMD.Parameters.Add(New SqlParameter("@rating", MyRatingTextBox.Text))
+            Try
+                CMD.ExecuteNonQuery()
+            Catch ex As System.Data.SqlClient.SqlException
+                MessageBox.Show("There was an error when updating your rating. Make sure you type a number from 1 to 10.")
+                Return
+            End Try
+        Else
+            CMD.CommandText = "SELECT TOP 1 * FROM Review ORDER BY id DESC"
+            Dim id As Integer
+            Dim RDR1 As SqlDataReader
+            RDR1 = CMD.ExecuteReader
+            While RDR1.Read
+                id = RDR1.Item("id") + 1
+            End While
+            CMD.CommandText = "INSERT INTO Review (id, rating, movie_id, user_id) VALUES (@id, @rating, @mo_id, @u_id)"
+            CMD.Parameters.Add(New SqlParameter("@id", id))
+            CMD.Parameters.Add(New SqlParameter("@rating", MyRatingTextBox.Text))
+            CMD.Parameters.Add(New SqlParameter("@m_id", Globals.shared_movie.movie_id))
+            CMD.Parameters.Add(New SqlParameter("@u_id", Globals.user.id))
+            Try
+                CMD.ExecuteNonQuery()
+            Catch ex As System.Data.SqlClient.SqlException
+                MessageBox.Show("There was an error when updating your rating. Make sure you type a number from 1 to 10.")
+                Return
+            End Try
+        End If
+        MessageBox.Show("Rating updated!")
+        getContent(sender, e)
+        ListBox1.SetSelected(tmp, True)
+    End Sub
+
+    Public Sub focus()
+        If mine Then
+            ListBox1.SetSelected(idx, True)
+        Else
+            ListBox4.SetSelected(idx, True)
+        End If
     End Sub
 End Class

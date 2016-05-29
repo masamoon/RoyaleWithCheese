@@ -103,6 +103,16 @@ Public Class Movie
         End Set
     End Property
 
+    Private _user_review As String
+    Public Property user_review() As String
+        Get
+            Return _user_review
+        End Get
+        Set(value As String)
+            _user_review = value
+        End Set
+    End Property
+
     Private Function getGenres()
         Dim CN As New SqlConnection(Globals.connectionPath)
         Dim CMD As New SqlCommand
@@ -129,9 +139,9 @@ Public Class Movie
             getGenres()
         End If
         If _user_rating = 0 Then
-            Return _movie_id & vbTab & _title & " (" & _year & ")"
+            Return _title & " (" & _year & ")"
         Else
-            Return _movie_id & vbTab & _title & " (" & _year & ")" & Convert.ToChar(Keys.Tab) & Convert.ToChar(Keys.Tab) & _user_rating
+            Return _title & " (" & _year & ")" & Convert.ToChar(Keys.Tab) & "Rating: " & _user_rating
         End If
 
     End Function

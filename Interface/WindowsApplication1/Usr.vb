@@ -60,6 +60,26 @@
         End Set
     End Property
 
+    Private _review As String
+    Public Property review() As String
+        Get
+            Return _review
+        End Get
+        Set(value As String)
+            _review = value
+        End Set
+    End Property
+
+    Private _rating As Integer
+    Public Property rating() As Integer
+        Get
+            Return _rating
+        End Get
+        Set(value As Integer)
+            _rating = value
+        End Set
+    End Property
+
     Overrides Function ToString() As String
         Return _username
     End Function

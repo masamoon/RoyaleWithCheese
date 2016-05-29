@@ -47,8 +47,6 @@ Partial Class MainForm
         Me.SeeReviewButton = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
-        Me.Button4 = New System.Windows.Forms.Button()
-        Me.Button5 = New System.Windows.Forms.Button()
         Me.UpdateReviewButton = New System.Windows.Forms.Button()
         Me.searchFilterBox = New System.Windows.Forms.TextBox()
         Me.searchButton = New System.Windows.Forms.Button()
@@ -68,6 +66,9 @@ Partial Class MainForm
         Me.LocationBox = New System.Windows.Forms.TextBox()
         Me.SeeProfileButton = New System.Windows.Forms.Button()
         Me.SeeFriendsProfileButton = New System.Windows.Forms.Button()
+        Me.SearchTextBox = New System.Windows.Forms.TextBox()
+        Me.SearchComboBox = New System.Windows.Forms.ComboBox()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
@@ -151,7 +152,7 @@ Partial Class MainForm
         '
         Me.heyLabel.AutoSize = True
         Me.heyLabel.Font = New System.Drawing.Font("Tahoma", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.heyLabel.Location = New System.Drawing.Point(23, 32)
+        Me.heyLabel.Location = New System.Drawing.Point(8, 32)
         Me.heyLabel.Name = "heyLabel"
         Me.heyLabel.Size = New System.Drawing.Size(171, 23)
         Me.heyLabel.TabIndex = 2
@@ -242,7 +243,7 @@ Partial Class MainForm
         '
         'OverallRatingTextBox
         '
-        Me.OverallRatingTextBox.Font = New System.Drawing.Font("Lucida Sans Unicode", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.OverallRatingTextBox.Font = New System.Drawing.Font("Lucida Sans Unicode", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.OverallRatingTextBox.Location = New System.Drawing.Point(587, 338)
         Me.OverallRatingTextBox.Multiline = True
         Me.OverallRatingTextBox.Name = "OverallRatingTextBox"
@@ -252,8 +253,9 @@ Partial Class MainForm
         '
         'MyRatingTextBox
         '
-        Me.MyRatingTextBox.Font = New System.Drawing.Font("Lucida Sans Unicode", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MyRatingTextBox.Font = New System.Drawing.Font("Lucida Sans Unicode", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MyRatingTextBox.Location = New System.Drawing.Point(587, 375)
+        Me.MyRatingTextBox.MaxLength = 2
         Me.MyRatingTextBox.Multiline = True
         Me.MyRatingTextBox.Name = "MyRatingTextBox"
         Me.MyRatingTextBox.Size = New System.Drawing.Size(36, 31)
@@ -299,30 +301,12 @@ Partial Class MainForm
         '
         'Button3
         '
-        Me.Button3.Location = New System.Drawing.Point(275, 32)
+        Me.Button3.Location = New System.Drawing.Point(620, 29)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(100, 34)
+        Me.Button3.Size = New System.Drawing.Size(50, 34)
         Me.Button3.TabIndex = 23
-        Me.Button3.Text = "Search Movies"
+        Me.Button3.Text = "Search"
         Me.Button3.UseVisualStyleBackColor = True
-        '
-        'Button4
-        '
-        Me.Button4.Location = New System.Drawing.Point(428, 32)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(100, 34)
-        Me.Button4.TabIndex = 24
-        Me.Button4.Text = "Search Users"
-        Me.Button4.UseVisualStyleBackColor = True
-        '
-        'Button5
-        '
-        Me.Button5.Location = New System.Drawing.Point(570, 32)
-        Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(100, 34)
-        Me.Button5.TabIndex = 25
-        Me.Button5.Text = "Search Filmmakers"
-        Me.Button5.UseVisualStyleBackColor = True
         '
         'UpdateReviewButton
         '
@@ -395,7 +379,7 @@ Partial Class MainForm
         Me.TabPage5.Location = New System.Drawing.Point(4, 22)
         Me.TabPage5.Name = "TabPage5"
         Me.TabPage5.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage5.Size = New System.Drawing.Size(392, 22)
+        Me.TabPage5.Size = New System.Drawing.Size(392, 126)
         Me.TabPage5.TabIndex = 1
         Me.TabPage5.Text = "Friends"
         Me.TabPage5.UseVisualStyleBackColor = True
@@ -414,7 +398,7 @@ Partial Class MainForm
         Me.TabPage6.Location = New System.Drawing.Point(4, 22)
         Me.TabPage6.Name = "TabPage6"
         Me.TabPage6.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage6.Size = New System.Drawing.Size(392, 22)
+        Me.TabPage6.Size = New System.Drawing.Size(392, 126)
         Me.TabPage6.TabIndex = 2
         Me.TabPage6.Text = "Subscriptions"
         Me.TabPage6.UseVisualStyleBackColor = True
@@ -439,7 +423,7 @@ Partial Class MainForm
         '
         'FriendsRatingBox
         '
-        Me.FriendsRatingBox.Font = New System.Drawing.Font("Lucida Sans Unicode", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FriendsRatingBox.Font = New System.Drawing.Font("Lucida Sans Unicode", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FriendsRatingBox.Location = New System.Drawing.Point(587, 418)
         Me.FriendsRatingBox.Multiline = True
         Me.FriendsRatingBox.Name = "FriendsRatingBox"
@@ -500,11 +484,38 @@ Partial Class MainForm
         Me.SeeFriendsProfileButton.Text = "See Friend's Profile"
         Me.SeeFriendsProfileButton.UseVisualStyleBackColor = True
         '
+        'SearchTextBox
+        '
+        Me.SearchTextBox.Location = New System.Drawing.Point(278, 37)
+        Me.SearchTextBox.Name = "SearchTextBox"
+        Me.SearchTextBox.Size = New System.Drawing.Size(222, 20)
+        Me.SearchTextBox.TabIndex = 39
+        '
+        'SearchComboBox
+        '
+        Me.SearchComboBox.FormattingEnabled = True
+        Me.SearchComboBox.Location = New System.Drawing.Point(521, 37)
+        Me.SearchComboBox.Name = "SearchComboBox"
+        Me.SearchComboBox.Size = New System.Drawing.Size(79, 21)
+        Me.SearchComboBox.TabIndex = 40
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(185, 34)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 41
+        Me.Button1.Text = "Logout"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(695, 517)
+        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.SearchComboBox)
+        Me.Controls.Add(Me.SearchTextBox)
         Me.Controls.Add(Me.SeeFriendsProfileButton)
         Me.Controls.Add(Me.SeeProfileButton)
         Me.Controls.Add(Me.LocationBox)
@@ -518,8 +529,6 @@ Partial Class MainForm
         Me.Controls.Add(Me.searchButton)
         Me.Controls.Add(Me.searchFilterBox)
         Me.Controls.Add(Me.UpdateReviewButton)
-        Me.Controls.Add(Me.Button5)
-        Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.SeeReviewButton)
@@ -578,8 +587,6 @@ Partial Class MainForm
     Friend WithEvents SeeReviewButton As Button
     Friend WithEvents Button2 As Button
     Friend WithEvents Button3 As Button
-    Friend WithEvents Button4 As Button
-    Friend WithEvents Button5 As Button
     Friend WithEvents UpdateReviewButton As Button
     Friend WithEvents searchFilterBox As TextBox
     Friend WithEvents searchButton As Button
@@ -599,4 +606,7 @@ Partial Class MainForm
     Friend WithEvents LocationBox As TextBox
     Friend WithEvents SeeProfileButton As Button
     Friend WithEvents SeeFriendsProfileButton As Button
+    Friend WithEvents SearchTextBox As TextBox
+    Friend WithEvents SearchComboBox As ComboBox
+    Friend WithEvents Button1 As Button
 End Class

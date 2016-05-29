@@ -23,3 +23,4 @@ C:\Users\alagao\Documents\Visual Studio 2015\Projects\WindowsApplication1\Window
 C:\Users\alagao\Documents\Visual Studio 2015\Projects\WindowsApplication1\WindowsApplication1\obj\Debug\WindowsApplication1.Login.resources
 C:\Users\alagao\Documents\Visual Studio 2015\Projects\WindowsApplication1\WindowsApplication1\obj\Debug\WindowsApplication1.Register.resources
 C:\Users\alagao\Documents\Visual Studio 2015\Projects\WindowsApplication1\WindowsApplication1\obj\Debug\WindowsApplication1.MoviePage.resources
+C:\Users\alagao\Documents\Visual Studio 2015\Projects\WindowsApplication1\WindowsApplication1\obj\Debug\WindowsApplication1.Review.resources
