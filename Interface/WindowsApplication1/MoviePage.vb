@@ -46,7 +46,7 @@ Public Class MoviePage
             PosterBox.SizeMode = PictureBoxSizeMode.StretchImage
             PosterBox.Load()
         Else
-            PosterBox.ImageLocation = "C:\Users\alagao\Desktop\posters\Question-mark.png"
+            PosterBox.ImageLocation = "C:\Users\Andre\Pictures\BD\Question-mark.png"
             PosterBox.Load()
         End If
 

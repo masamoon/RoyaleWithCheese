@@ -225,7 +225,7 @@ Public Class MainForm
             PosterBox.ImageLocation = tmpMovie.poster
             PosterBox.Load()
         Else
-            PosterBox.ImageLocation = "C:\Users\alagao\Desktop\posters\Question-mark.png"
+            PosterBox.ImageLocation = "C:\Users\Andre\Pictures\BD\Question-mark.png"
             PosterBox.Load()
         End If
         RuntimeTextBox.Text = tmpMovie.runtime & " min"
@@ -482,5 +482,36 @@ Public Class MainForm
         Else
             ListBox4.SetSelected(idx, True)
         End If
+    End Sub
+
+    Private Sub searchButton_Click(sender As Object, e As EventArgs) Handles searchButton.Click
+        CN.Open()
+        CMD.CommandText = "SELECT * From Movie join Review on Review.movie_id = Movie.movie_id join Usr on Review.user_id = Usr.id
+                            WHERE Usr.id = @id AND Movie.title LIKE @title"
+        CMD.Parameters.Add("@title", SqlDbType.Text).Value = "%" + searchFilterBox.Text + "%"
+        CMD.Parameters.Add("@id", SqlDbType.Int).Value = Globals.user.id
+        ListBox1.Items.Clear()
+        Dim RDR1 As SqlDataReader
+        RDR1 = CMD.ExecuteReader
+
+        While RDR1.Read
+            Dim m As New Movie
+            m.movie_id = RDR1.Item("movie_id")
+            m.title = RDR1.Item("title")
+            m.synopsis = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("synopsis")), "", RDR1.Item("synopsis")))
+            m.country = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("country")), "", RDR1.Item("country")))
+            m.poster = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("poster")), "", RDR1.Item("poster")))
+            m.runtime = RDR1.Item("runtime")
+            m.year = RDR1.Item("year")
+            m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            m.user_review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
+            ListBox1.Items.Add(m)
+        End While
+        RDR1.Close()
+    End Sub
+
+    Private Sub clearFilterButton_Click(sender As Object, e As EventArgs) Handles clearFilterButton.Click
+        ListBox1.Items.Clear()
+        getContent(sender, e)
     End Sub
 End Class

@@ -75,6 +75,12 @@
   <ItemGroup>
     <Compile Include="Countries.vb" />
     <Compile Include="Filmmaker.vb" />
+    <Compile Include="FilmmakerUser.Designer.vb">
+      <DependentUpon>FilmmakerUser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FilmmakerUser.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Globals.vb" />
     <Compile Include="Login.Designer.vb">
       <DependentUpon>Login.vb</DependentUpon>
@@ -123,9 +129,18 @@
     <Compile Include="Review.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="User.Designer.vb">
+      <DependentUpon>User.vb</DependentUpon>
+    </Compile>
+    <Compile Include="User.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Usr.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FilmmakerUser.resx">
+      <DependentUpon>FilmmakerUser.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.vb</DependentUpon>
     </EmbeddedResource>
@@ -147,8 +162,12 @@
     <EmbeddedResource Include="Review.resx">
       <DependentUpon>Review.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="User.resx">
+      <DependentUpon>User.vb</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
