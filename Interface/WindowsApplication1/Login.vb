@@ -9,7 +9,7 @@ Public Class Login
         Dim CN As New SqlConnection(Globals.connectionPath)
         Dim CMD As New SqlCommand
         CMD.Connection = CN
-        CMD.CommandText = "select dbo.Username_Exists(@username)"
+        CMD.CommandText = "SELECT dbo.Username_Exists(@username)"
         CMD.CommandType = CommandType.Text
         CMD.Parameters.Add(New SqlParameter("@username", UsernameBox.Text))
 
@@ -41,9 +41,5 @@ Public Class Login
     Private Sub RegisterButton_Click(sender As Object, e As EventArgs) Handles RegisterButton.Click
         Me.Hide()
         Register.Show()
-    End Sub
-
-    Private Sub Login_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
     End Sub
 End Class

@@ -82,48 +82,27 @@ Public Class Register
                 cn.Close()
             End If
 
-            cmd.CommandText = "SELECT TOP 1 * FROM Usr ORDER BY id DESC"
-            cn.Open()
-            Dim id As Integer
-            Try
-                Dim RDR1 As SqlDataReader
-                RDR1 = cmd.ExecuteReader
-                While RDR1.Read
-                    id = RDR1.Item("id") + 1
-                End While
-            Catch ex As Exception
-                MsgBox(ex.Message)
-            End Try
-            If cn.State = ConnectionState.Open Then
-                cn.Close()
-            End If
-
-            cn.Dispose()
-            cmd.Dispose()
-            cn.ConnectionString = Globals.connectionPath
-
-            cmd.CommandText = "INSERT INTO Usr (id, username, fname, lname, location, email) VALUES (@id, @username, @fname, @lname, @location, @email)"
+            cmd.CommandText = "EXEC dbo.pr_AddUsr @username = @username2, @fname = @fname2, @lname = @lname2, @location = @location2, @email = @email2"
             cn.Open()
             Try
                 cmd.Parameters.Clear()
-                cmd.Parameters.Add("@id", SqlDbType.Int).Value = id
-                cmd.Parameters.Add("@username", SqlDbType.VarChar).Value = UsernameBox.Text
+                cmd.Parameters.Add("@username2", SqlDbType.VarChar).Value = UsernameBox.Text
                 If Not String.IsNullOrEmpty(FirstNameBox.Text) Then
-                    cmd.Parameters.Add("@fname", SqlDbType.VarChar).Value = FirstNameBox.Text
+                    cmd.Parameters.Add("@fname2", SqlDbType.VarChar).Value = FirstNameBox.Text
                 Else
-                    cmd.Parameters.Add("@fname", SqlDbType.VarChar).Value = DBNull.Value
+                    cmd.Parameters.Add("@fname2", SqlDbType.VarChar).Value = DBNull.Value
                 End If
                 If Not String.IsNullOrEmpty(LastNameBox.Text) Then
-                    cmd.Parameters.Add("@lname", SqlDbType.VarChar).Value = LastNameBox.Text
+                    cmd.Parameters.Add("@lname2", SqlDbType.VarChar).Value = LastNameBox.Text
                 Else
-                    cmd.Parameters.Add("@lname", SqlDbType.VarChar).Value = DBNull.Value
+                    cmd.Parameters.Add("@lname2", SqlDbType.VarChar).Value = DBNull.Value
                 End If
                 If Not String.IsNullOrEmpty(ComboBox1.Text) Then
-                    cmd.Parameters.Add("@location", SqlDbType.VarChar).Value = ComboBox1.Text
+                    cmd.Parameters.Add("@location2", SqlDbType.VarChar).Value = ComboBox1.Text
                 Else
-                    cmd.Parameters.Add("@location", SqlDbType.VarChar).Value = DBNull.Value
+                    cmd.Parameters.Add("@location2", SqlDbType.VarChar).Value = DBNull.Value
                 End If
-                cmd.Parameters.Add("@email", SqlDbType.VarChar).Value = EmailBox.Text
+                cmd.Parameters.Add("@email2", SqlDbType.VarChar).Value = EmailBox.Text
                 cmd.ExecuteNonQuery()
 
             Catch ex As Exception

@@ -34,13 +34,16 @@ Public Class MainForm
         ListBox2.Items.Clear()
         ListBox3.ScrollAlwaysVisible = True
         ListBox3.HorizontalScrollbar = True
-        CMD.CommandText = "SELECT * From Movie join Review on Review.movie_id = Movie.movie_id join Usr on Review.user_id = Usr.id
-                            WHERE Usr.id = @id"
+        ClearConnection()
+        CN.Open()
+        CMD.CommandText = "SELECT * FROM dbo.GetUsrMovieInfo(@id)"
         CMD.Parameters.Add("@id", SqlDbType.Int).Value = Globals.user.id
         Dim RDR1 As SqlDataReader
         RDR1 = CMD.ExecuteReader
         While RDR1.Read
             Dim m As New Movie
+            m.user_rating = 0
+            m.avg_rating = 0
             m.movie_id = RDR1.Item("movie_id")
             m.title = RDR1.Item("title")
             m.synopsis = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("synopsis")), "", RDR1.Item("synopsis")))
@@ -48,14 +51,18 @@ Public Class MainForm
             m.poster = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("poster")), "", RDR1.Item("poster")))
             m.runtime = RDR1.Item("runtime")
             m.year = RDR1.Item("year")
-            m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            If (Not IsDBNull(RDR1.Item("rating"))) Then
+                m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            End If
             m.user_review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
+            If (Not IsDBNull(RDR1.Item("rating"))) Then
+                m.avg_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("avg_rating")), "", RDR1.Item("avg_rating")))
+            End If
             ListBox1.Items.Add(m)
         End While
         RDR1.Close()
 
-        CMD.CommandText = "SELECT * FROM FriendList join Usr on FriendList.user_id = Usr.id OR FriendList.user_id_friend = Usr.id
-                            WHERE ((user_id = @uid OR user_id_friend = @uid) AND id != @uid)"
+        CMD.CommandText = "SELECT * FROM dbo.GetFriends(@uid)"
         CMD.Parameters.Add("@uid", SqlDbType.Int).Value = Globals.user.id
         Dim RDR2 As SqlDataReader
         RDR2 = CMD.ExecuteReader
@@ -70,6 +77,7 @@ Public Class MainForm
             ListBox2.Items.Add(u)
         End While
         RDR2.Close()
+        ' TODO '
         CMD.CommandText = "Select * From Filmmaker"
         Dim RDR3 As SqlDataReader
         RDR3 = CMD.ExecuteReader
@@ -110,6 +118,9 @@ Public Class MainForm
         If ListBox2.SelectedIndex > -1 Then
             tmpUsr = ListBox2.SelectedItem
             showUsr()
+            If ListBox4.Items.Count > 0 Then
+                ListBox4.SetSelected(0, True)
+            End If
         End If
     End Sub
     Private Sub ListBox3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox3.SelectedIndexChanged
@@ -130,13 +141,14 @@ Public Class MainForm
             Globals.shared_movie = tmpMovieFromFriend
 
             showMovieFromFriend()
+
         End If
     End Sub
 
     Private Sub ListBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox5.SelectedIndexChanged
         If ListBox5.SelectedIndex > -1 Then
             tmpUserFromFriend = ListBox5.SelectedItem
-            '    showUsrFromFriend()
+            showUsrFromFriend()
         End If
     End Sub
     Private Sub ListBox6_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox6.SelectedIndexChanged
@@ -148,17 +160,19 @@ Public Class MainForm
 
     Private Sub TabControl1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
         If TabControl1.SelectedIndex = 0 Then
-            hideUsr()
             showMovie()
             If ListBox1.Items.Count > 0 Then
                 ListBox1.SetSelected(0, True)
             End If
         End If
         If TabControl1.SelectedIndex = 1 Then
-            hideMovie()
             showUsr()
             If ListBox2.Items.Count > 0 Then
                 ListBox2.SetSelected(0, True)
+            End If
+            TabControl2.TabIndex = 0
+            If ListBox4.Items.Count > 0 Then
+                ListBox4.SetSelected(0, True)
             End If
         End If
         If TabControl1.SelectedIndex = 2 Then
@@ -170,11 +184,13 @@ Public Class MainForm
 
     Private Sub TabControl2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl2.SelectedIndexChanged
         If TabControl2.SelectedIndex = 0 Then
+            showMovieFromFriend()
             If ListBox4.Items.Count > 0 Then
                 ListBox4.SetSelected(0, True)
             End If
         End If
         If TabControl2.SelectedIndex = 1 Then
+            showUsrFromFriend()
             If ListBox5.Items.Count > 0 Then
                 ListBox5.SetSelected(0, True)
             End If
@@ -188,7 +204,7 @@ Public Class MainForm
 
     Private Sub getUser(ByVal sender As Object, ByVal e As EventArgs)
         CN.Open()
-        CMD.CommandText = "SELECT * FROM Usr WHERE username = @username"
+        CMD.CommandText = "SELECT * FROM GetUsr(@username)"
         CMD.Parameters.Add("@username", SqlDbType.VarChar).Value = Globals.user.username
         Dim RDR1 As SqlDataReader
         RDR1 = CMD.ExecuteReader
@@ -204,13 +220,23 @@ Public Class MainForm
     End Sub
 
     Private Sub showMovie()
+
+
         hideUsr()
+        RuntimeLabel.Show()
+        RuntimeTextBox.Show()
+        countryLabel.Show()
+        CountryTextBox.Show()
         MyRatingLabel.Show()
         MyRatingTextBox.Show()
+        OverallRatingLabel.Show()
+        OverallRatingTextBox.Show()
         UpdateReviewButton.Show()
         synbioTextBox.Show()
         PosterBox.Show()
         yearLabel.Show()
+        SeeReviewButton.Show()
+        Button2.Show()
         GenresLabel.Text = ""
         GenresLabel.Show()
         If ListBox1.Items.Count <= 0 Then Exit Sub
@@ -225,12 +251,13 @@ Public Class MainForm
             PosterBox.ImageLocation = tmpMovie.poster
             PosterBox.Load()
         Else
-            PosterBox.ImageLocation = "C:\Users\Andre\Pictures\BD\Question-mark.png"
+            PosterBox.ImageLocation = "C:\Users\alagao\Desktop\posters\Question-mark.png"
             PosterBox.Load()
         End If
         RuntimeTextBox.Text = tmpMovie.runtime & " min"
         CountryTextBox.Text = tmpMovie.country
         MyRatingTextBox.Text = tmpMovie.user_rating
+        OverallRatingTextBox.Text = tmpMovie.avg_rating
     End Sub
 
     Private Sub hideMovie()
@@ -277,8 +304,36 @@ Public Class MainForm
     End Sub
 
     Private Sub showMovieFromFriend()
-        RuntimeTextBox.Text = tmpMovieFromFriend.runtime & "min"
-        CountryTextBox.Text = tmpMovieFromFriend.country
+        SeeFriendsProfileButton.Hide()
+        RuntimeLabel.Show()
+        RuntimeTextBox.Show()
+        countryLabel.Show()
+        CountryTextBox.Show()
+        OverallRatingLabel.Show()
+        OverallRatingTextBox.Show()
+        FriendsRatingLabel.Show()
+        FriendsRatingBox.Show()
+        Button2.Show()
+        SeeReviewButton.Show()
+        If ListBox4.Items.Count > 0 Then
+            RuntimeTextBox.Text = tmpMovieFromFriend.runtime & "min"
+            CountryTextBox.Text = tmpMovieFromFriend.country
+        End If
+
+    End Sub
+
+    Private Sub showUsrFromFriend()
+        RuntimeLabel.Hide()
+        RuntimeTextBox.Hide()
+        countryLabel.Hide()
+        CountryTextBox.Hide()
+        OverallRatingLabel.Hide()
+        OverallRatingTextBox.Hide()
+        FriendsRatingBox.Hide()
+        FriendsRatingLabel.Hide()
+        Button2.Hide()
+        SeeReviewButton.Hide()
+        SeeFriendsProfileButton.Show()
 
     End Sub
 
@@ -294,13 +349,13 @@ Public Class MainForm
         ListBox6.Items.Clear()
         ListBox6.ScrollAlwaysVisible = True
         ListBox6.HorizontalScrollbar = True
-        CMD.CommandText = "SELECT * From Movie join Review on Review.movie_id = Movie.movie_id join Usr on Review.user_id = Usr.id
-                            WHERE Usr.id = @friend_id"
-        CMD.Parameters.Add("@friend_id", SqlDbType.Int).Value = tmpUsr.id
+        CMD.CommandText = "SELECT * FROM GetUsrMovieInfo(@id)"
+        CMD.Parameters.Add("@id", SqlDbType.Int).Value = tmpUsr.id
         Dim RDR1 As SqlDataReader
         RDR1 = CMD.ExecuteReader
         While RDR1.Read
             Dim m As New Movie
+            m.user_rating = 0
             m.movie_id = RDR1.Item("movie_id")
             m.title = RDR1.Item("title")
             m.synopsis = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("synopsis")), "", RDR1.Item("synopsis")))
@@ -308,16 +363,17 @@ Public Class MainForm
             m.poster = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("poster")), "", RDR1.Item("poster")))
             m.runtime = RDR1.Item("runtime")
             m.year = RDR1.Item("year")
-            m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            If (Not IsDBNull(RDR1.Item("rating"))) Then
+                m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            End If
             m.user_review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
             ListBox4.Items.Add(m)
         End While
 
         RDR1.Close()
 
-        CMD.CommandText = "SELECT * FROM FriendList join Usr on FriendList.user_id = Usr.id OR FriendList.user_id_friend = Usr.id
-                            WHERE ((user_id = @frienduid OR user_id_friend = @frienduid) AND id != @frienduid)"
-        CMD.Parameters.Add("@frienduid", SqlDbType.Int).Value = tmpUsr.id
+        CMD.CommandText = "SELECT * FROM GetFriends(@uid)"
+        CMD.Parameters.Add("@uid", SqlDbType.Int).Value = tmpUsr.id
         Dim RDR2 As SqlDataReader
         RDR2 = CMD.ExecuteReader
         While RDR2.Read
@@ -331,6 +387,7 @@ Public Class MainForm
             ListBox5.Items.Add(u)
         End While
         RDR2.Close()
+        'TODO'
         CMD.CommandText = "Select * From Filmmaker"
         Dim RDR3 As SqlDataReader
         RDR3 = CMD.ExecuteReader
@@ -370,6 +427,9 @@ Public Class MainForm
         SearchComboBox.Items.Add("Users")
         SearchComboBox.Items.Add("Filmmakers")
         SearchComboBox.SelectedIndex = 0
+        TabControl1.TabIndex = 0
+        hideUsr()
+        showMovie()
     End Sub
 
     Private Sub ClearConnection()
@@ -383,10 +443,18 @@ Public Class MainForm
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         If TabControl1.SelectedIndex = 0 Then
+            If ListBox1.Items.Count = 0 Then
+                MessageBox.Show("No movie available!")
+                Return
+            End If
             Globals.shared_movie = ListBox1.SelectedItem
             idx = ListBox1.SelectedIndex
             mine = True
         Else
+            If ListBox4.Items.Count = 0 Then
+                MessageBox.Show("No movie available!")
+                Return
+            End If
             Globals.shared_movie = ListBox4.SelectedItem
             idx = ListBox4.SelectedIndex
             mine = False
@@ -419,10 +487,18 @@ Public Class MainForm
 
         Dim rev As Review
         If TabControl1.SelectedIndex = 0 Then
+            If ListBox1.Items.Count = 0 Then
+                MessageBox.Show("No review available!")
+                Return
+            End If
             rev = New Review(Globals.user)
             idx = ListBox1.SelectedIndex
             mine = True
         Else
+            If ListBox4.Items.Count = 0 Then
+                MessageBox.Show("No review available!")
+                Return
+            End If
             rev = New Review(tmpUsr)
             idx = ListBox4.SelectedIndex
             mine = False
@@ -431,87 +507,50 @@ Public Class MainForm
     End Sub
 
     Private Sub UpdateReviewButton_Click(sender As Object, e As EventArgs) Handles UpdateReviewButton.Click
+        If TabControl1.SelectedIndex = 0 Then
+            If ListBox1.Items.Count = 0 Then
+                MessageBox.Show("Invalid operation!")
+                Return
+            End If
+        ElseIf TabControl1.SelectedIndex = 1 Then
+            If ListBox4.Items.Count = 0 Then
+                MessageBox.Show("Invalid operation!")
+                Return
+            End If
+        End If
+        If String.IsNullOrEmpty(MyRatingTextBox.Text) Then
+            MessageBox.Show("Please insert a value!")
+            Return
+        End If
         ClearConnection()
         Dim tmp As New Integer
         tmp = ListBox1.SelectedIndex
         CN.Open()
-        CMD.CommandText = "SELECT dbo.WroteReview(@movie_id, @user_id)"
-        CMD.Parameters.Add(New SqlParameter("@movie_id", Globals.shared_movie.movie_id))
-        CMD.Parameters.Add(New SqlParameter("@user_id", Globals.user.id))
-        Dim accept As Integer
-        accept = CMD.ExecuteScalar
-        If accept = 1 Then
-            CMD.CommandText = "UPDATE Review SET rating = @rating WHERE user_id = @uid AND movie_id = @mid"
-            CMD.Parameters.Add(New SqlParameter("@mid", Globals.shared_movie.movie_id))
-            CMD.Parameters.Add(New SqlParameter("@uid", Globals.user.id))
-            CMD.Parameters.Add(New SqlParameter("@rating", MyRatingTextBox.Text))
-            Try
-                CMD.ExecuteNonQuery()
-            Catch ex As System.Data.SqlClient.SqlException
-                MessageBox.Show("There was an error when updating your rating. Make sure you type a number from 1 to 10.")
-                Return
-            End Try
-        Else
-            CMD.CommandText = "SELECT TOP 1 * FROM Review ORDER BY id DESC"
-            Dim id As Integer
-            Dim RDR1 As SqlDataReader
-            RDR1 = CMD.ExecuteReader
-            While RDR1.Read
-                id = RDR1.Item("id") + 1
-            End While
-            CMD.CommandText = "INSERT INTO Review (id, rating, movie_id, user_id) VALUES (@id, @rating, @mo_id, @u_id)"
-            CMD.Parameters.Add(New SqlParameter("@id", id))
-            CMD.Parameters.Add(New SqlParameter("@rating", MyRatingTextBox.Text))
-            CMD.Parameters.Add(New SqlParameter("@m_id", Globals.shared_movie.movie_id))
-            CMD.Parameters.Add(New SqlParameter("@u_id", Globals.user.id))
-            Try
-                CMD.ExecuteNonQuery()
-            Catch ex As System.Data.SqlClient.SqlException
-                MessageBox.Show("There was an error when updating your rating. Make sure you type a number from 1 to 10.")
-                Return
-            End Try
-        End If
+        CMD.CommandText = "EXEC dbo.pr_GeneralAddRating @rating = @rating4, @movie_id = @mid, @user_id = @uid"
+        CMD.Parameters.Add(New SqlParameter("@mid", Globals.shared_movie.movie_id))
+        CMD.Parameters.Add(New SqlParameter("@uid", Globals.user.id))
+        CMD.Parameters.Add(New SqlParameter("@rating4", MyRatingTextBox.Text))
+        Try
+            CMD.ExecuteNonQuery()
+        Catch ex As System.Data.SqlClient.SqlException
+            MessageBox.Show("There was an error when updating your rating. Make sure you type a number from 1 to 10.")
+            Return
+        End Try
         MessageBox.Show("Rating updated!")
         getContent(sender, e)
         ListBox1.SetSelected(tmp, True)
     End Sub
 
-    Public Sub focus()
+    Public Sub focus(deleting As Boolean)
         If mine Then
-            ListBox1.SetSelected(idx, True)
-        Else
-            ListBox4.SetSelected(idx, True)
+            If ListBox1.Items.Count > 0 Then
+                If deleting And idx > 0 Then
+                    ListBox1.SetSelected(idx - 1, True)
+                Else
+                    ListBox1.SetSelected(idx, True)
+                End If
+            End If
         End If
     End Sub
 
-    Private Sub searchButton_Click(sender As Object, e As EventArgs) Handles searchButton.Click
-        CN.Open()
-        CMD.CommandText = "SELECT * From Movie join Review on Review.movie_id = Movie.movie_id join Usr on Review.user_id = Usr.id
-                            WHERE Usr.id = @id AND Movie.title LIKE @title"
-        CMD.Parameters.Add("@title", SqlDbType.Text).Value = "%" + searchFilterBox.Text + "%"
-        CMD.Parameters.Add("@id", SqlDbType.Int).Value = Globals.user.id
-        ListBox1.Items.Clear()
-        Dim RDR1 As SqlDataReader
-        RDR1 = CMD.ExecuteReader
-
-        While RDR1.Read
-            Dim m As New Movie
-            m.movie_id = RDR1.Item("movie_id")
-            m.title = RDR1.Item("title")
-            m.synopsis = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("synopsis")), "", RDR1.Item("synopsis")))
-            m.country = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("country")), "", RDR1.Item("country")))
-            m.poster = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("poster")), "", RDR1.Item("poster")))
-            m.runtime = RDR1.Item("runtime")
-            m.year = RDR1.Item("year")
-            m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
-            m.user_review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
-            ListBox1.Items.Add(m)
-        End While
-        RDR1.Close()
-    End Sub
-
-    Private Sub clearFilterButton_Click(sender As Object, e As EventArgs) Handles clearFilterButton.Click
-        ListBox1.Items.Clear()
-        getContent(sender, e)
-    End Sub
 End Class

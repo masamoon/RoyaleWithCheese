@@ -113,6 +113,16 @@ Public Class Movie
         End Set
     End Property
 
+    Private _avg_rating As Integer
+    Public Property avg_rating() As Integer
+        Get
+            Return _avg_rating
+        End Get
+        Set(value As Integer)
+            _avg_rating = value
+        End Set
+    End Property
+
     Private Function getGenres()
         Dim CN As New SqlConnection(Globals.connectionPath)
         Dim CMD As New SqlCommand

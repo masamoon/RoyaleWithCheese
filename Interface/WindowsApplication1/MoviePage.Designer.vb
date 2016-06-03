@@ -392,7 +392,7 @@ Partial Class MoviePage
         Me.Controls.Add(Me.yearLabel)
         Me.Controls.Add(Me.nameLabel)
         Me.Name = "MoviePage"
-        Me.Text = "MoviePage"
+        Me.Text = "Royale With Cheese"
         CType(Me.PosterBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()

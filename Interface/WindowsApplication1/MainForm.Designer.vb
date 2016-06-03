@@ -548,7 +548,7 @@ Partial Class MainForm
         Me.Controls.Add(Me.heyLabel)
         Me.Controls.Add(Me.TabControl1)
         Me.Name = "MainForm"
-        Me.Text = "Form1"
+        Me.Text = "Royale With Cheese"
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
         Me.TabPage2.ResumeLayout(False)

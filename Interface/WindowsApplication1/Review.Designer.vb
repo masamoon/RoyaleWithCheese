@@ -29,6 +29,7 @@ Partial Class Review
         Me.UpdateRatingButton = New System.Windows.Forms.Button()
         Me.UpdateReviewButton = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.DeleteReviewButton = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'nameLabel
@@ -82,7 +83,7 @@ Partial Class Review
         '
         'UpdateReviewButton
         '
-        Me.UpdateReviewButton.Location = New System.Drawing.Point(27, 255)
+        Me.UpdateReviewButton.Location = New System.Drawing.Point(12, 261)
         Me.UpdateReviewButton.Name = "UpdateReviewButton"
         Me.UpdateReviewButton.Size = New System.Drawing.Size(75, 23)
         Me.UpdateReviewButton.TabIndex = 11
@@ -98,11 +99,21 @@ Partial Class Review
         Me.Label1.TabIndex = 12
         Me.Label1.Text = "Rating:"
         '
+        'DeleteReviewButton
+        '
+        Me.DeleteReviewButton.Location = New System.Drawing.Point(151, 261)
+        Me.DeleteReviewButton.Name = "DeleteReviewButton"
+        Me.DeleteReviewButton.Size = New System.Drawing.Size(75, 23)
+        Me.DeleteReviewButton.TabIndex = 13
+        Me.DeleteReviewButton.Text = "Delete Review"
+        Me.DeleteReviewButton.UseVisualStyleBackColor = True
+        '
         'Review
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(443, 318)
+        Me.Controls.Add(Me.DeleteReviewButton)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.UpdateReviewButton)
         Me.Controls.Add(Me.UpdateRatingButton)
@@ -124,4 +135,5 @@ Partial Class Review
     Friend WithEvents UpdateRatingButton As Button
     Friend WithEvents UpdateReviewButton As Button
     Friend WithEvents Label1 As Label
+    Friend WithEvents DeleteReviewButton As Button
 End Class

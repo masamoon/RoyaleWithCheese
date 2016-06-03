@@ -46,12 +46,12 @@ Public Class MoviePage
             PosterBox.SizeMode = PictureBoxSizeMode.StretchImage
             PosterBox.Load()
         Else
-            PosterBox.ImageLocation = "C:\Users\Andre\Pictures\BD\Question-mark.png"
+            PosterBox.ImageLocation = "C:\Users\alagao\Desktop\posters\Question-mark.png"
             PosterBox.Load()
         End If
 
         CN.Open()
-        CMD.CommandText = "SELECT * FROM Review WHERE movie_id = @movie_id AND user_id = @user_id"
+        CMD.CommandText = "SELECT * FROM dbo.GetReview(@movie_id, @user_id)"
         CMD.Parameters.Add("@movie_id", SqlDbType.Int).Value = Globals.shared_movie.movie_id
         CMD.Parameters.Add("@user_id", SqlDbType.Int).Value = Globals.user.id
         Dim RDR1 As SqlDataReader
@@ -59,8 +59,11 @@ Public Class MoviePage
         Dim rat As Integer
         RDR1 = CMD.ExecuteReader
         While RDR1.Read
+            rat = 0
             rev = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
-            rat = Convert.ToUInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            If (Not IsDBNull(RDR1.Item("rating"))) Then
+                rat = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            End If
         End While
         If Not String.IsNullOrEmpty(rev) Then
             myreviewTextBox.Text = rev
@@ -71,16 +74,18 @@ Public Class MoviePage
             MyRatingTextBox.Text = rat
         End If
         RDR1.Close()
-        CMD.CommandText = "SELECT * FROM FriendList join Usr on FriendList.user_id = Usr.id OR FriendList.user_id_friend = Usr.id Join Review on Review.user_id = FriendList.user_id_friend JOIN Movie ON Movie.movie_id = Review.movie_id
-WHERE ((FriendList.user_id = @uid OR user_id_friend = @uid) AND Usr.id != @uid)  AND Review.movie_id = @mov_id"
-        CMD.Parameters.Add("@uid", SqlDbType.Int).Value = Globals.user.id
+        CMD.CommandText = "SELECT * FROM dbo.GetReviewFromFriend(@mov_id, @uid)"
         CMD.Parameters.Add("@mov_id", SqlDbType.Int).Value = Globals.shared_movie.movie_id
-        Dim u As New Usr
+        CMD.Parameters.Add("@uid", SqlDbType.Int).Value = Globals.user.id
         RDR1 = CMD.ExecuteReader
         While RDR1.Read
+            Dim u As New Usr
+            u.rating = 0
             u.username = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("username")), "", RDR1.Item("username")))
             u.review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
-            u.rating = Convert.ToUInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            If (Not IsDBNull(RDR1.Item("rating"))) Then
+                u.rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            End If
             ListBox1.Items.Add(u)
         End While
         If ListBox1.Items.Count > 0 Then
@@ -88,14 +93,17 @@ WHERE ((FriendList.user_id = @uid OR user_id_friend = @uid) AND Usr.id != @uid) 
         End If
         RDR1.Close()
 
-        CMD.CommandText = "SELECT * From Movie join Review on Review.movie_id = Movie.movie_id join Usr on Review.user_id = Usr.id
-WHERE Movie.movie_id = @mid"
+        CMD.CommandText = "SELECT * FROM dbo.GetAllReviews(@mid)"
         CMD.Parameters.Add("@mid", SqlDbType.Int).Value = Globals.shared_movie.movie_id
         RDR1 = CMD.ExecuteReader
         While RDR1.Read
+            Dim u As New Usr
+            u.rating = 0
             u.username = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("username")), "", RDR1.Item("username")))
             u.review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
-            u.rating = Convert.ToUInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            If (Not IsDBNull(RDR1.Item("rating"))) Then
+                u.rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            End If
             ListBox2.Items.Add(u)
         End While
         If ListBox2.Items.Count > 0 Then
@@ -140,7 +148,6 @@ WHERE Movie.movie_id = @mid"
             MessageBox.Show("No friends wrote reviews about this movie.")
             Return
         End If
-        MessageBox.Show(ListBox1.SelectedItem.ToString)
         Dim Review As New Review(ListBox1.SelectedItem)
         Review.Show()
     End Sub
@@ -150,7 +157,6 @@ WHERE Movie.movie_id = @mid"
             MessageBox.Show("No one wrote reviews about this movie.")
             Return
         End If
-        MessageBox.Show(ListBox2.SelectedItem.ToString)
         Dim Review As New Review(ListBox2.SelectedItem)
         Review.Show()
     End Sub
@@ -160,45 +166,19 @@ WHERE Movie.movie_id = @mid"
         Dim tmp As New Integer
         tmp = ListBox1.SelectedIndex
         CN.Open()
-        CMD.CommandText = "SELECT dbo.WroteReview(@movie_id, @user_id)"
-        CMD.Parameters.Add(New SqlParameter("@movie_id", Globals.shared_movie.movie_id))
-        CMD.Parameters.Add(New SqlParameter("@user_id", Globals.user.id))
-        Dim accept As Integer
-        accept = CMD.ExecuteScalar
-        If accept = 1 Then
-            CMD.CommandText = "UPDATE Review SET rating = @rating WHERE user_id = @uid AND movie_id = @mid"
-            CMD.Parameters.Add(New SqlParameter("@mid", Globals.shared_movie.movie_id))
-            CMD.Parameters.Add(New SqlParameter("@uid", Globals.user.id))
-            CMD.Parameters.Add(New SqlParameter("@rating", MyRatingTextBox.Text))
-            Try
-                CMD.ExecuteNonQuery()
-            Catch ex As System.Data.SqlClient.SqlException
-                MessageBox.Show("There was an error when updating your rating. Make sure you type a number from 1 to 10.")
-                Return
-            End Try
-        Else
-            CMD.CommandText = "SELECT TOP 1 * FROM Review ORDER BY id DESC"
-            Dim id As Integer
-            Dim RDR1 As SqlDataReader
-            RDR1 = CMD.ExecuteReader
-            While RDR1.Read
-                id = RDR1.Item("id") + 1
-            End While
-            CMD.CommandText = "INSERT INTO Review (id, rating, movie_id, user_id) VALUES (@id, @rating, @mo_id, @u_id)"
-            CMD.Parameters.Add(New SqlParameter("@id", id))
-            CMD.Parameters.Add(New SqlParameter("@rating", MyRatingTextBox.Text))
-            CMD.Parameters.Add(New SqlParameter("@m_id", Globals.shared_movie.movie_id))
-            CMD.Parameters.Add(New SqlParameter("@u_id", Globals.user.id))
-            Try
-                CMD.ExecuteNonQuery()
-            Catch ex As System.Data.SqlClient.SqlException
-                MessageBox.Show("There was an error when updating your rating. Make sure you type a number from 1 to 10.")
-                Return
-            End Try
-        End If
+        CMD.CommandText = "EXEC dbo.pr_GeneralAddRating @rating = @rating4, @movie_id = @mid, @user_id = @uid"
+        CMD.Parameters.Add(New SqlParameter("@mid", Globals.shared_movie.movie_id))
+        CMD.Parameters.Add(New SqlParameter("@uid", Globals.user.id))
+        CMD.Parameters.Add(New SqlParameter("@rating4", MyRatingTextBox.Text))
+        Try
+            CMD.ExecuteNonQuery()
+        Catch ex As System.Data.SqlClient.SqlException
+            MessageBox.Show("There was an error when updating your rating. Make sure you type a number from 1 to 10.")
+            Return
+        End Try
         MessageBox.Show("Rating updated!")
         MainForm.getContent(sender, e)
-        MainForm.focus()
+        MainForm.focus(False)
     End Sub
 
     Private Sub ClearConnection()
@@ -211,48 +191,27 @@ WHERE Movie.movie_id = @mid"
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        If String.IsNullOrEmpty(myreviewTextBox.Text) Then
+            MessageBox.Show("Please write a review!")
+            Return
+        End If
         ClearConnection()
         Dim tmp As New Integer
         tmp = ListBox1.SelectedIndex
         CN.Open()
-        CMD.CommandText = "SELECT dbo.WroteReview(@movie_id, @user_id)"
-        CMD.Parameters.Add(New SqlParameter("@movie_id", Globals.shared_movie.movie_id))
-        CMD.Parameters.Add(New SqlParameter("@user_id", Globals.user.id))
-        Dim accept As Integer
-        accept = CMD.ExecuteScalar
-        If accept = 1 Then
-            CMD.CommandText = "UPDATE Review SET body = @body WHERE user_id = @uid AND movie_id = @mid"
-            CMD.Parameters.Add(New SqlParameter("@mid", Globals.shared_movie.movie_id))
-            CMD.Parameters.Add(New SqlParameter("@uid", Globals.user.id))
-            CMD.Parameters.Add(New SqlParameter("@body", myreviewTextBox.Text))
-            Try
-                CMD.ExecuteNonQuery()
-            Catch ex As System.Data.SqlClient.SqlException
-                MessageBox.Show("There was an error when updating your rating. Make sure you type a number from 1 to 10.")
-                Return
-            End Try
-        Else
-            CMD.CommandText = "SELECT TOP 1 * FROM Review ORDER BY id DESC"
-            Dim id As Integer
-            Dim RDR1 As SqlDataReader
-            RDR1 = CMD.ExecuteReader
-            While RDR1.Read
-                id = RDR1.Item("id") + 1
-            End While
-            CMD.CommandText = "INSERT INTO Review (id, body, movie_id, user_id) VALUES (@id, @body, @mo_id, @u_id)"
-            CMD.Parameters.Add(New SqlParameter("@id", id))
-            CMD.Parameters.Add(New SqlParameter("@body", myreviewTextBox.Text))
-            CMD.Parameters.Add(New SqlParameter("@m_id", Globals.shared_movie.movie_id))
-            CMD.Parameters.Add(New SqlParameter("@u_id", Globals.user.id))
-            Try
-                CMD.ExecuteNonQuery()
-            Catch ex As System.Data.SqlClient.SqlException
-                MessageBox.Show("There was an error when updating your review.")
-                Return
-            End Try
-        End If
+        CMD.CommandText = "EXEC dbo.pr_GeneralAddReview @body = @body2 , @movie_id = @mid, @user_id = @uid"
+        CMD.Parameters.Add(New SqlParameter("@mid", Globals.shared_movie.movie_id))
+        CMD.Parameters.Add(New SqlParameter("@uid", Globals.user.id))
+        CMD.Parameters.Add(New SqlParameter("@body2", myreviewTextBox.Text))
+        Try
+            CMD.ExecuteNonQuery()
+        Catch ex As System.Data.SqlClient.SqlException
+            MessageBox.Show("There was an error when updating your rating.")
+        Return
+        End Try
         MessageBox.Show("Review updated!")
         MainForm.getContent(sender, e)
-        MainForm.focus()
+        MainForm.focus(False)
     End Sub
+
 End Class
