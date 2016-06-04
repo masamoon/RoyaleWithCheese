@@ -31,14 +31,18 @@ Partial Class FilmmakerUser
         Me.ListBox3 = New System.Windows.Forms.ListBox()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
         Me.ListBox4 = New System.Windows.Forms.ListBox()
+        Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.ListBox5 = New System.Windows.Forms.ListBox()
         Me.Location_box = New System.Windows.Forms.TextBox()
         Me.Username_box = New System.Windows.Forms.TextBox()
         Me.Fullname_box = New System.Windows.Forms.TextBox()
         Me.Bio = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Birthdate = New System.Windows.Forms.TextBox()
-        Me.TabPage1 = New System.Windows.Forms.TabPage()
-        Me.ListBox5 = New System.Windows.Forms.ListBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.Reviews.SuspendLayout()
         Me.Lists.SuspendLayout()
@@ -68,6 +72,7 @@ Partial Class FilmmakerUser
         Me.Reviews.Padding = New System.Windows.Forms.Padding(3)
         Me.Reviews.Size = New System.Drawing.Size(358, 177)
         Me.Reviews.TabIndex = 0
+        Me.Reviews.Text = "Reviews"
         Me.Reviews.UseVisualStyleBackColor = True
         '
         'ListBox1
@@ -86,7 +91,7 @@ Partial Class FilmmakerUser
         Me.Lists.Padding = New System.Windows.Forms.Padding(3)
         Me.Lists.Size = New System.Drawing.Size(358, 177)
         Me.Lists.TabIndex = 1
-        Me.Lists.Text = "TabPage2"
+        Me.Lists.Text = "Lists"
         Me.Lists.UseVisualStyleBackColor = True
         '
         'ListBox2
@@ -105,7 +110,7 @@ Partial Class FilmmakerUser
         Me.Subscriptions.Padding = New System.Windows.Forms.Padding(3)
         Me.Subscriptions.Size = New System.Drawing.Size(358, 177)
         Me.Subscriptions.TabIndex = 2
-        Me.Subscriptions.Text = "TabPage3"
+        Me.Subscriptions.Text = "Subscriptions"
         Me.Subscriptions.UseVisualStyleBackColor = True
         '
         'ListBox3
@@ -135,23 +140,45 @@ Partial Class FilmmakerUser
         Me.ListBox4.Size = New System.Drawing.Size(359, 173)
         Me.ListBox4.TabIndex = 1
         '
+        'TabPage1
+        '
+        Me.TabPage1.Controls.Add(Me.ListBox5)
+        Me.TabPage1.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage1.Name = "TabPage1"
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage1.Size = New System.Drawing.Size(358, 177)
+        Me.TabPage1.TabIndex = 4
+        Me.TabPage1.Text = "TabPage1"
+        Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'ListBox5
+        '
+        Me.ListBox5.FormattingEnabled = True
+        Me.ListBox5.Location = New System.Drawing.Point(0, 2)
+        Me.ListBox5.Name = "ListBox5"
+        Me.ListBox5.Size = New System.Drawing.Size(359, 173)
+        Me.ListBox5.TabIndex = 2
+        '
         'Location_box
         '
-        Me.Location_box.Location = New System.Drawing.Point(345, 113)
+        Me.Location_box.Enabled = False
+        Me.Location_box.Location = New System.Drawing.Point(349, 149)
         Me.Location_box.Name = "Location_box"
         Me.Location_box.Size = New System.Drawing.Size(100, 20)
         Me.Location_box.TabIndex = 8
         '
         'Username_box
         '
-        Me.Username_box.Location = New System.Drawing.Point(345, 87)
+        Me.Username_box.Enabled = False
+        Me.Username_box.Location = New System.Drawing.Point(349, 123)
         Me.Username_box.Name = "Username_box"
         Me.Username_box.Size = New System.Drawing.Size(100, 20)
         Me.Username_box.TabIndex = 7
         '
         'Fullname_box
         '
-        Me.Fullname_box.Location = New System.Drawing.Point(345, 61)
+        Me.Fullname_box.Enabled = False
+        Me.Fullname_box.Location = New System.Drawing.Point(349, 97)
         Me.Fullname_box.Name = "Fullname_box"
         Me.Fullname_box.Size = New System.Drawing.Size(100, 20)
         Me.Fullname_box.TabIndex = 6
@@ -175,35 +202,57 @@ Partial Class FilmmakerUser
         '
         'Birthdate
         '
-        Me.Birthdate.Location = New System.Drawing.Point(345, 139)
+        Me.Birthdate.Enabled = False
+        Me.Birthdate.Location = New System.Drawing.Point(349, 175)
         Me.Birthdate.Name = "Birthdate"
         Me.Birthdate.Size = New System.Drawing.Size(100, 20)
         Me.Birthdate.TabIndex = 11
         '
-        'TabPage1
+        'Label2
         '
-        Me.TabPage1.Controls.Add(Me.ListBox5)
-        Me.TabPage1.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(358, 177)
-        Me.TabPage1.TabIndex = 4
-        Me.TabPage1.Text = "TabPage1"
-        Me.TabPage1.UseVisualStyleBackColor = True
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(289, 97)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(35, 13)
+        Me.Label2.TabIndex = 12
+        Me.Label2.Text = "Name"
         '
-        'ListBox5
+        'Label3
         '
-        Me.ListBox5.FormattingEnabled = True
-        Me.ListBox5.Location = New System.Drawing.Point(0, 2)
-        Me.ListBox5.Name = "ListBox5"
-        Me.ListBox5.Size = New System.Drawing.Size(359, 173)
-        Me.ListBox5.TabIndex = 2
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(289, 123)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(55, 13)
+        Me.Label3.TabIndex = 13
+        Me.Label3.Text = "Username"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(289, 149)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(48, 13)
+        Me.Label4.TabIndex = 14
+        Me.Label4.Text = "Location"
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(289, 175)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(49, 13)
+        Me.Label5.TabIndex = 15
+        Me.Label5.Text = "Birthdate"
         '
         'FilmmakerUser
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(660, 554)
+        Me.ClientSize = New System.Drawing.Size(569, 554)
+        Me.Controls.Add(Me.Label5)
+        Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Birthdate)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Bio)
@@ -241,4 +290,8 @@ Partial Class FilmmakerUser
     Friend WithEvents Birthdate As TextBox
     Friend WithEvents TabPage1 As TabPage
     Friend WithEvents ListBox5 As ListBox
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Label3 As Label
+    Friend WithEvents Label4 As Label
+    Friend WithEvents Label5 As Label
 End Class
