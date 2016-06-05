@@ -228,10 +228,10 @@ Public Class MainForm
         Next genre
         PosterBox.SizeMode = PictureBoxSizeMode.StretchImage
         If Not String.IsNullOrEmpty(tmpMovie.poster) Then
-            PosterBox.ImageLocation = tmpMovie.poster
+            PosterBox.ImageLocation = Globals.working_directory + "\posters\" + tmpMovie.poster
             PosterBox.Load()
         Else
-            PosterBox.ImageLocation = "C:\Users\alagao\Desktop\posters\Question-mark.png"
+            PosterBox.ImageLocation = Globals.working_directory + "\posters\Question-mark.png"
             PosterBox.Load()
         End If
         RuntimeTextBox.Text = tmpMovie.runtime & " min"

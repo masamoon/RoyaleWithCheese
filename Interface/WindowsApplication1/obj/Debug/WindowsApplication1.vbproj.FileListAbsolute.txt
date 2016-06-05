@@ -28,3 +28,22 @@ C:\Users\alagao\Documents\Visual Studio 2015\Projects\WindowsApplication1\Window
 C:\Users\alagao\Documents\Visual Studio 2015\Projects\WindowsApplication1\WindowsApplication1\obj\Debug\WindowsApplication1.FilmmakerUser.resources
 C:\Users\alagao\Documents\Visual Studio 2015\Projects\WindowsApplication1\WindowsApplication1\obj\Debug\WindowsApplication1.vbprojResolveAssemblyReference.cache
 C:\Users\alagao\Documents\Visual Studio 2015\Projects\WindowsApplication1\WindowsApplication1\obj\Debug\WindowsApplication1.FilmmakerUnregisterd.resources
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\bin\Debug\WindowsApplication1.exe.config
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\obj\Debug\WindowsApplication1.exe
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\obj\Debug\WindowsApplication1.xml
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\obj\Debug\WindowsApplication1.pdb
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\bin\Debug\WindowsApplication1.exe
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\bin\Debug\WindowsApplication1.pdb
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\bin\Debug\WindowsApplication1.xml
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\obj\Debug\WindowsApplication1.vbprojResolveAssemblyReference.cache
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\obj\Debug\WindowsApplication1.FilmmakerUnregisterd.resources
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\obj\Debug\WindowsApplication1.FilmmakerUser.resources
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\obj\Debug\WindowsApplication1.Login.resources
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\obj\Debug\WindowsApplication1.MainForm.resources
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\obj\Debug\WindowsApplication1.MoviePage.resources
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\obj\Debug\WindowsApplication1.Resources.resources
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\obj\Debug\WindowsApplication1.Register.resources
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\obj\Debug\WindowsApplication1.Review.resources
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\obj\Debug\WindowsApplication1.Search.resources
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\obj\Debug\WindowsApplication1.User.resources
+C:\Users\alopes\BD_final_final\RoyaleWithCheese\Interface\WindowsApplication1\obj\Debug\WindowsApplication1.vbproj.GenerateResource.Cache

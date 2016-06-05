@@ -1,4 +1,5 @@
 ﻿Imports System.Data.SqlClient
+Imports System.IO
 
 Public Class Login
     Private Function LoginButton_Click(sender As Object, e As EventArgs) Handles LoginButton.Click
@@ -14,8 +15,8 @@ Public Class Login
         CMD.Parameters.Add(New SqlParameter("@username", UsernameBox.Text))
 
         Try
-            cn.Open()
-            If cn.State = ConnectionState.Open Then
+            CN.Open()
+            If CN.State = ConnectionState.Open Then
                 Dim res As Integer
                 res = CMD.ExecuteScalar
                 If res = 0 Then
@@ -28,11 +29,11 @@ Public Class Login
             End If
 
         Catch ex As Exception
-        MsgBox("ExecQuery Error: " & vbNewLine & ex.Message)
+            MsgBox("ExecQuery Error: " & vbNewLine & ex.Message)
         End Try
 
-        If cn.State = ConnectionState.Open Then
-            cn.Close()
+        If CN.State = ConnectionState.Open Then
+            CN.Close()
         End If
 
         Return True
@@ -41,5 +42,9 @@ Public Class Login
     Private Sub RegisterButton_Click(sender As Object, e As EventArgs) Handles RegisterButton.Click
         Me.Hide()
         Register.Show()
+    End Sub
+
+    Private Sub Login_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Globals.working_directory = Directory.GetCurrentDirectory()
     End Sub
 End Class

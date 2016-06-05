@@ -44,11 +44,11 @@ Public Class MoviePage
         OverallRatingTextBox.Text = Globals.shared_movie.avg_rating
 
         If Not String.IsNullOrEmpty(poster_path) Then
-            PosterBox.ImageLocation = poster_path
+            PosterBox.ImageLocation = Globals.working_directory + "\posters\" + poster_path
             PosterBox.SizeMode = PictureBoxSizeMode.StretchImage
             PosterBox.Load()
         Else
-            PosterBox.ImageLocation = "C:\Users\alagao\Desktop\posters\Question-mark.png"
+            PosterBox.ImageLocation = Globals.working_directory + "\posters\Question-mark.png"
             PosterBox.Load()
         End If
         CN.ConnectionString = Globals.connectionPath
