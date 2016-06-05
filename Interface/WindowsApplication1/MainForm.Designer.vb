@@ -28,8 +28,6 @@ Partial Class MainForm
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.ListBox2 = New System.Windows.Forms.ListBox()
-        Me.TabPage3 = New System.Windows.Forms.TabPage()
-        Me.ListBox3 = New System.Windows.Forms.ListBox()
         Me.heyLabel = New System.Windows.Forms.Label()
         Me.PosterBox = New System.Windows.Forms.PictureBox()
         Me.nameLabel = New System.Windows.Forms.Label()
@@ -49,15 +47,13 @@ Partial Class MainForm
         Me.Button3 = New System.Windows.Forms.Button()
         Me.UpdateReviewButton = New System.Windows.Forms.Button()
         Me.searchFilterBox = New System.Windows.Forms.TextBox()
-        Me.searchButton = New System.Windows.Forms.Button()
+        Me.filterbutton = New System.Windows.Forms.Button()
         Me.clearFilterButton = New System.Windows.Forms.Button()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
         Me.ListBox4 = New System.Windows.Forms.ListBox()
         Me.TabPage5 = New System.Windows.Forms.TabPage()
         Me.ListBox5 = New System.Windows.Forms.ListBox()
-        Me.TabPage6 = New System.Windows.Forms.TabPage()
-        Me.ListBox6 = New System.Windows.Forms.ListBox()
         Me.FriendsRatingLabel = New System.Windows.Forms.Label()
         Me.FriendsRatingBox = New System.Windows.Forms.TextBox()
         Me.UserNameLabel = New System.Windows.Forms.Label()
@@ -69,15 +65,14 @@ Partial Class MainForm
         Me.SearchTextBox = New System.Windows.Forms.TextBox()
         Me.SearchComboBox = New System.Windows.Forms.ComboBox()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.MyProfileButton = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
-        Me.TabPage3.SuspendLayout()
         CType(Me.PosterBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl2.SuspendLayout()
         Me.TabPage4.SuspendLayout()
         Me.TabPage5.SuspendLayout()
-        Me.TabPage6.SuspendLayout()
         Me.SuspendLayout()
         '
         'ListBox1
@@ -92,7 +87,6 @@ Partial Class MainForm
         '
         Me.TabControl1.Controls.Add(Me.TabPage1)
         Me.TabControl1.Controls.Add(Me.TabPage2)
-        Me.TabControl1.Controls.Add(Me.TabPage3)
         Me.TabControl1.Location = New System.Drawing.Point(12, 78)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
@@ -128,25 +122,6 @@ Partial Class MainForm
         Me.ListBox2.Name = "ListBox2"
         Me.ListBox2.Size = New System.Drawing.Size(248, 368)
         Me.ListBox2.TabIndex = 0
-        '
-        'TabPage3
-        '
-        Me.TabPage3.Controls.Add(Me.ListBox3)
-        Me.TabPage3.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(244, 361)
-        Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = "Subscriptions"
-        Me.TabPage3.UseVisualStyleBackColor = True
-        '
-        'ListBox3
-        '
-        Me.ListBox3.FormattingEnabled = True
-        Me.ListBox3.Location = New System.Drawing.Point(-4, 0)
-        Me.ListBox3.Name = "ListBox3"
-        Me.ListBox3.Size = New System.Drawing.Size(248, 368)
-        Me.ListBox3.TabIndex = 0
         '
         'heyLabel
         '
@@ -292,7 +267,7 @@ Partial Class MainForm
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(353, 455)
+        Me.Button2.Location = New System.Drawing.Point(355, 455)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 39)
         Me.Button2.TabIndex = 22
@@ -325,14 +300,14 @@ Partial Class MainForm
         Me.searchFilterBox.TabIndex = 27
         Me.searchFilterBox.Tag = " "
         '
-        'searchButton
+        'filterbutton
         '
-        Me.searchButton.Location = New System.Drawing.Point(119, 471)
-        Me.searchButton.Name = "searchButton"
-        Me.searchButton.Size = New System.Drawing.Size(75, 23)
-        Me.searchButton.TabIndex = 28
-        Me.searchButton.Text = "Filter"
-        Me.searchButton.UseVisualStyleBackColor = True
+        Me.filterbutton.Location = New System.Drawing.Point(119, 471)
+        Me.filterbutton.Name = "filterbutton"
+        Me.filterbutton.Size = New System.Drawing.Size(75, 23)
+        Me.filterbutton.TabIndex = 28
+        Me.filterbutton.Text = "Filter"
+        Me.filterbutton.UseVisualStyleBackColor = True
         '
         'clearFilterButton
         '
@@ -347,7 +322,6 @@ Partial Class MainForm
         '
         Me.TabControl2.Controls.Add(Me.TabPage4)
         Me.TabControl2.Controls.Add(Me.TabPage5)
-        Me.TabControl2.Controls.Add(Me.TabPage6)
         Me.TabControl2.Location = New System.Drawing.Point(275, 178)
         Me.TabControl2.Name = "TabControl2"
         Me.TabControl2.SelectedIndex = 0
@@ -391,25 +365,6 @@ Partial Class MainForm
         Me.ListBox5.Name = "ListBox5"
         Me.ListBox5.Size = New System.Drawing.Size(395, 134)
         Me.ListBox5.TabIndex = 0
-        '
-        'TabPage6
-        '
-        Me.TabPage6.Controls.Add(Me.ListBox6)
-        Me.TabPage6.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage6.Name = "TabPage6"
-        Me.TabPage6.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage6.Size = New System.Drawing.Size(392, 126)
-        Me.TabPage6.TabIndex = 2
-        Me.TabPage6.Text = "Subscriptions"
-        Me.TabPage6.UseVisualStyleBackColor = True
-        '
-        'ListBox6
-        '
-        Me.ListBox6.FormattingEnabled = True
-        Me.ListBox6.Location = New System.Drawing.Point(-4, 0)
-        Me.ListBox6.Name = "ListBox6"
-        Me.ListBox6.Size = New System.Drawing.Size(396, 134)
-        Me.ListBox6.TabIndex = 0
         '
         'FriendsRatingLabel
         '
@@ -508,11 +463,21 @@ Partial Class MainForm
         Me.Button1.Text = "Logout"
         Me.Button1.UseVisualStyleBackColor = True
         '
+        'MyProfileButton
+        '
+        Me.MyProfileButton.Location = New System.Drawing.Point(172, 64)
+        Me.MyProfileButton.Name = "MyProfileButton"
+        Me.MyProfileButton.Size = New System.Drawing.Size(88, 23)
+        Me.MyProfileButton.TabIndex = 42
+        Me.MyProfileButton.Text = "See My Profile"
+        Me.MyProfileButton.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(695, 517)
+        Me.Controls.Add(Me.MyProfileButton)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.SearchComboBox)
         Me.Controls.Add(Me.SearchTextBox)
@@ -526,7 +491,7 @@ Partial Class MainForm
         Me.Controls.Add(Me.FriendsRatingLabel)
         Me.Controls.Add(Me.TabControl2)
         Me.Controls.Add(Me.clearFilterButton)
-        Me.Controls.Add(Me.searchButton)
+        Me.Controls.Add(Me.filterbutton)
         Me.Controls.Add(Me.searchFilterBox)
         Me.Controls.Add(Me.UpdateReviewButton)
         Me.Controls.Add(Me.Button3)
@@ -552,12 +517,10 @@ Partial Class MainForm
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
         Me.TabPage2.ResumeLayout(False)
-        Me.TabPage3.ResumeLayout(False)
         CType(Me.PosterBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabControl2.ResumeLayout(False)
         Me.TabPage4.ResumeLayout(False)
         Me.TabPage5.ResumeLayout(False)
-        Me.TabPage6.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -567,9 +530,7 @@ Partial Class MainForm
     Friend WithEvents TabControl1 As TabControl
     Friend WithEvents TabPage1 As TabPage
     Friend WithEvents TabPage2 As TabPage
-    Friend WithEvents TabPage3 As TabPage
     Friend WithEvents ListBox2 As ListBox
-    Friend WithEvents ListBox3 As ListBox
     Friend WithEvents heyLabel As Label
     Friend WithEvents PosterBox As PictureBox
     Friend WithEvents nameLabel As Label
@@ -589,15 +550,13 @@ Partial Class MainForm
     Friend WithEvents Button3 As Button
     Friend WithEvents UpdateReviewButton As Button
     Friend WithEvents searchFilterBox As TextBox
-    Friend WithEvents searchButton As Button
+    Friend WithEvents filterbutton As Button
     Friend WithEvents clearFilterButton As Button
     Friend WithEvents TabControl2 As TabControl
     Friend WithEvents TabPage4 As TabPage
     Friend WithEvents ListBox4 As ListBox
     Friend WithEvents TabPage5 As TabPage
     Friend WithEvents ListBox5 As ListBox
-    Friend WithEvents TabPage6 As TabPage
-    Friend WithEvents ListBox6 As ListBox
     Friend WithEvents FriendsRatingLabel As Label
     Friend WithEvents FriendsRatingBox As TextBox
     Friend WithEvents UserNameLabel As Label
@@ -609,4 +568,5 @@ Partial Class MainForm
     Friend WithEvents SearchTextBox As TextBox
     Friend WithEvents SearchComboBox As ComboBox
     Friend WithEvents Button1 As Button
+    Friend WithEvents MyProfileButton As Button
 End Class

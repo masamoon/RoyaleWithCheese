@@ -5,14 +5,42 @@ Public Class FilmmakerUser
     Dim CMD As SqlCommand
 
     Private Sub FilmmakerUser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        CN = New SqlConnection("data source=DESKTOP-QMMOJTU\SQLEXPRESS;integrated security=true;initial catalog=mov")
+        CN = New SqlConnection(Globals.connectionPath)
         CMD = New SqlCommand
         CN.Open()
         CMD.Connection = CN
+        CMD.CommandText = "SELECT dbo.IsSubscribed(@uid, @fid)"
+        CMD.Parameters.Add("@uid", SqlDbType.Int).Value = Globals.user.id
+        CMD.Parameters.Add("@fid", SqlDbType.Int).Value = Globals.shared_fm.user_id
+        Dim result As Integer
+        result = CMD.ExecuteScalar
+        If result = 1 Then
+            ClearConnection()
+            CN.Open()
+            CMD.Connection = CN
+            CMD.CommandText = "SELECT dbo.GetReward(@uid, @fid)"
+            CMD.Parameters.Add("@uid", SqlDbType.Int).Value = Globals.user.id
+            CMD.Parameters.Add("@fid", SqlDbType.Int).Value = Globals.shared_fm.user_id
+            Dim reward As Integer
+            reward = CMD.ExecuteScalar
+            rewardTextBox.Text = reward
+            UnsubscribeButton.Show()
+            RewardLabel.Show()
+            rewardTextBox.Show()
+            UpdateRewardButton.Show()
+            SubscribeButton.Hide()
+        Else
+            UnsubscribeButton.Hide()
+            RewardLabel.Hide()
+            rewardTextBox.Hide()
+            UpdateRewardButton.Hide()
+            SubscribeButton.Show()
+        End If
+        ClearConnection()
+        CN.Open()
+        CMD.CommandText = "SELECT * FROM dbo.GetFilmmaker(@uid)"
 
-        CMD.CommandText = "SELECT * FROM Filmmaker JOIN Usr on Usr.username = Filmmaker.username WHERE Usr.id=@uid"
-
-        CMD.Parameters.Add("@uid", SqlDbType.Int).Value = 1
+        CMD.Parameters.Add("@uid", SqlDbType.Int).Value = Globals.shared_fm.user_id
 
         Dim RDR As SqlDataReader
         RDR = CMD.ExecuteReader
@@ -38,10 +66,7 @@ Public Class FilmmakerUser
         RDR.Close()
         CN.Close()
 
-        CN = New SqlConnection("data source=DESKTOP-QMMOJTU\SQLEXPRESS;integrated security=true;initial catalog=mov")
-        CMD = New SqlCommand
-        CN.Open()
-        CMD.Connection = CN
+
 
         ListBox1.Items.Clear()
         ListBox1.ScrollAlwaysVisible = True
@@ -50,26 +75,38 @@ Public Class FilmmakerUser
         ListBox3.ScrollAlwaysVisible = True
         ListBox3.HorizontalScrollbar = True
 
-        CMD.CommandText = "SELECT * FROM Review JOIN Movie ON Review.movie_id=Movie.movie_id WHERE user_id=@uid"
+        ClearConnection()
 
-        CMD.Parameters.Add("@uid", SqlDbType.Int).Value = 1
+        CN.Open()
+        CMD.CommandText = "SELECT * FROM dbo.GetUsrMovieInfo(@uid)"
 
-        Dim RDR2 As SqlDataReader
-        RDR2 = CMD.ExecuteReader
-        While RDR2.Read
-            Dim r As New ReviewO
-            r.id = RDR2.Item("id")
+        CMD.Parameters.Add("@uid", SqlDbType.Int).Value = Globals.shared_fm.user_id
 
-            r.movie_id = RDR2.Item("movie_id")
-            r.user_id = RDR2.Item("user_id")
-            r.rating = RDR2.Item("rating")
-            ListBox1.Items.Add(RDR2.Item("title") + " | rating: " + Convert.ToString(r.rating))
-
-
+        Dim RDR1 As SqlDataReader
+        RDR1 = CMD.ExecuteReader
+        While RDR1.Read
+            Dim m As New Movie
+            m.user_rating = 0
+            m.avg_rating = 0
+            m.movie_id = RDR1.Item("movie_id")
+            m.title = RDR1.Item("title")
+            m.synopsis = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("synopsis")), "", RDR1.Item("synopsis")))
+            m.country = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("country")), "", RDR1.Item("country")))
+            m.poster = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("poster")), "", RDR1.Item("poster")))
+            m.runtime = RDR1.Item("runtime")
+            m.year = RDR1.Item("year")
+            If (Not IsDBNull(RDR1.Item("rating"))) Then
+                m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            End If
+            m.user_review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
+            If (Not IsDBNull(RDR1.Item("avg_rating"))) Then
+                m.avg_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("avg_rating")), "", RDR1.Item("avg_rating")))
+            End If
+            ListBox1.Items.Add(m)
 
 
         End While
-        RDR2.Close()
+        RDR1.Close()
         CN.Close()
 
         CN = New SqlConnection(Globals.connectionPath)
@@ -80,7 +117,7 @@ Public Class FilmmakerUser
 
         CMD.CommandText = "SELECT * FROM List WHERE user_id=@uid"
 
-        CMD.Parameters.Add("@uid", SqlDbType.Int).Value = 1
+        CMD.Parameters.Add("@uid", SqlDbType.Int).Value = Globals.user.id
 
         Dim RDR3 As SqlDataReader
         RDR3 = CMD.ExecuteReader
@@ -96,16 +133,26 @@ Public Class FilmmakerUser
         CN.Open()
         CMD.Connection = CN
 
-        CMD.CommandText = "SELECT * FROM Movie JOIN Participates ON Movie.movie_id = Participates.movie_id WHERE Participates.filmmaker_id=@fid"
-        CMD.Parameters.Add("@uid", SqlDbType.Int).Value = 1
-
-        Dim RDR4 As SqlDataReader
-        RDR4 = CMD.ExecuteReader
-        While RDR4.Read
-            ListBox4.Items.Add(RDR4.Item("title"))
+        CMD.CommandText = "SELECT * FROM dbo.GetAllParticipations(@fid)"
+        CMD.Parameters.Add("@fid", SqlDbType.Int).Value = Globals.shared_fm.id
+        RDR1 = CMD.ExecuteReader
+        While RDR1.Read
+            Dim m As New Movie
+            m.avg_rating = 0
+            m.movie_id = RDR1.Item("movie_id")
+            m.title = RDR1.Item("title")
+            m.synopsis = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("synopsis")), "", RDR1.Item("synopsis")))
+            m.country = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("country")), "", RDR1.Item("country")))
+            m.poster = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("poster")), "", RDR1.Item("poster")))
+            m.runtime = RDR1.Item("runtime")
+            m.year = RDR1.Item("year")
+            If (Not IsDBNull(RDR1.Item("avg_rating"))) Then
+                m.avg_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("avg_rating")), "", RDR1.Item("avg_rating")))
+            End If
+            ListBox4.Items.Add(m)
         End While
 
-        RDR4.Close()
+        RDR1.Close()
         CN.Close()
 
 
@@ -114,9 +161,9 @@ Public Class FilmmakerUser
         CN.Open()
         CMD.Connection = CN
 
-        CMD.CommandText = "SELECT * FROM Filmmaker JOIN Usr on Usr.username = Filmmaker.username JOIN FilmmakerRole on FilmmakerRole.filmmaker_id = Filmmaker.filmmaker_id JOIN Roles on Roles.role_id=FilmmakerRole.role_id WHERE Usr.id=@uid"
+        CMD.CommandText = "SELECT * FROM dbo.GetRolesG(@fid)"
 
-        CMD.Parameters.Add("@uid", SqlDbType.Int).Value = 1
+        CMD.Parameters.Add("@fid", SqlDbType.Int).Value = Globals.shared_fm.id
 
         Dim RDR5 As SqlDataReader
         RDR5 = CMD.ExecuteReader
@@ -124,12 +171,134 @@ Public Class FilmmakerUser
             ListBox5.Items.Add(RDR5.Item("role_name"))
         End While
 
+        If ListBox1.Items.Count > 0 Then
+            ListBox1.SelectedIndex = 0
+        End If
+        If ListBox2.Items.Count > 0 Then
+            ListBox1.SelectedIndex = 0
+        End If
+        If ListBox3.Items.Count > 0 Then
+            ListBox1.SelectedIndex = 0
+        End If
+        If ListBox4.Items.Count > 0 Then
+            ListBox1.SelectedIndex = 0
+        End If
+        If ListBox5.Items.Count > 0 Then
+            ListBox1.SelectedIndex = 0
+        End If
+
+    End Sub
+
+    Private Sub TabControl1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
+        If TabControl1.SelectedIndex = 0 Or TabControl1.SelectedIndex = 3 Then
+            Button1.Show()
+        Else
+            Button1.Hide()
+        End If
+    End Sub
 
 
+    Private Sub ClearConnection()
+        CN.Close()
+        CN.Dispose()
+        CMD.Dispose()
+        CN.ConnectionString = Globals.connectionPath
+        CMD.Connection = CN
+        CMD.Parameters.Clear()
+    End Sub
 
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        If TabControl1.SelectedIndex = 0 Then
+            If ListBox1.SelectedItem Is Nothing Then
+                MessageBox.Show("No movie selected!")
+                Return
+            End If
+            Globals.shared_movie = ListBox1.SelectedItem
+        Else
+            If ListBox4.SelectedItem Is Nothing Then
+                MessageBox.Show("No movie selected!")
+                Return
+            End If
+            Globals.shared_movie = ListBox4.SelectedItem
+        End If
+        Dim mpage As New MoviePage
+        Me.Hide()
+        mpage.Show()
 
+    End Sub
 
+    Private Sub rewardTextBox_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles rewardTextBox.KeyPress
+        If (Microsoft.VisualBasic.Asc(e.KeyChar) < 48) _
+                  Or (Microsoft.VisualBasic.Asc(e.KeyChar) > 57) Then
+            e.Handled = True
+        End If
+        If (Microsoft.VisualBasic.Asc(e.KeyChar) = 8) Then
+            e.Handled = False
+        End If
+    End Sub
 
+    Public Sub FilmmakerUser_FormClosed(ByVal sender As Object, ByVal e As EventArgs) Handles Me.FormClosed
+        Me.Hide()
+        MainForm.Show()
 
+    End Sub
+
+    Private Sub SubscribeButton_Click(sender As Object, e As EventArgs) Handles SubscribeButton.Click
+        ClearConnection()
+        CN.Open()
+        CMD.CommandText = "EXEC dbo.pr_AddSubs @uid = @uid2, @fid = @fid2, @reward = @reward2"
+        CMD.Parameters.Add(New SqlParameter("@uid2", Globals.user.id))
+        CMD.Parameters.Add(New SqlParameter("@fid2", Globals.shared_fm.user_id))
+        CMD.Parameters.Add(New SqlParameter("@reward2", 0))
+        Try
+            CMD.ExecuteNonQuery()
+        Catch ex As System.Data.SqlClient.SqlException
+            MessageBox.Show("There was an error when subscribing.")
+            Return
+        End Try
+        MainForm.getContent(sender, e)
+        MainForm.focus(True)
+        Me.Hide()
+        MessageBox.Show("Subsctiption successful!")
+        MainForm.Show()
+    End Sub
+
+    Private Sub UnsubscribeButton_Click(sender As Object, e As EventArgs) Handles UnsubscribeButton.Click
+        ClearConnection()
+        CN.Open()
+        CMD.CommandText = "EXEC dbo.pr_DelSubs @uid = @uid2, @fid = @fid2"
+        CMD.Parameters.Add(New SqlParameter("@uid2", Globals.user.id))
+        CMD.Parameters.Add(New SqlParameter("@fid2", Globals.shared_fm.user_id))
+        Try
+            CMD.ExecuteNonQuery()
+        Catch ex As System.Data.SqlClient.SqlException
+            MessageBox.Show("There was an error when unsubscribing.")
+            Return
+        End Try
+        MainForm.getContent(sender, e)
+        MainForm.focus(True)
+        Me.Hide()
+        MessageBox.Show("Unsubsctiption successful!")
+        MainForm.Show()
+    End Sub
+
+    Private Sub UpdateRewardButton_Click(sender As Object, e As EventArgs) Handles UpdateRewardButton.Click
+        ClearConnection()
+        CN.Open()
+        CMD.CommandText = "EXEC dbo.pr_UpdateSubs @uid = @uid2, @fid = @fid2, @reward = @reward2"
+        CMD.Parameters.Add(New SqlParameter("@uid2", Globals.user.id))
+        CMD.Parameters.Add(New SqlParameter("@fid2", Globals.shared_fm.user_id))
+        CMD.Parameters.Add(New SqlParameter("@reward2", rewardTextBox.Text))
+        Try
+            CMD.ExecuteNonQuery()
+        Catch ex As System.Data.SqlClient.SqlException
+            MessageBox.Show("There was an error when updating the reward.")
+            Return
+        End Try
+        MainForm.getContent(sender, e)
+        MainForm.focus(True)
+        Me.Hide()
+        MessageBox.Show("Reward updated!")
+        MainForm.Show()
     End Sub
 End Class

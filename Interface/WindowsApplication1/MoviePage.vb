@@ -6,8 +6,8 @@
 Public Class MoviePage
 
 
-    Dim CN As SqlConnection
-    Dim CMD As SqlCommand
+    Dim CN As New SqlConnection
+    Dim CMD As New SqlCommand
 
     Dim tempUsr As New Usr
     Dim tempUsr2 As New Usr
@@ -41,6 +41,8 @@ Public Class MoviePage
         poster_path = Globals.shared_movie.poster
         RuntimeTextBox.Text = Globals.shared_movie.runtime
         yearLabel.Text = Globals.shared_movie.year
+        OverallRatingTextBox.Text = Globals.shared_movie.avg_rating
+
         If Not String.IsNullOrEmpty(poster_path) Then
             PosterBox.ImageLocation = poster_path
             PosterBox.SizeMode = PictureBoxSizeMode.StretchImage
@@ -49,7 +51,7 @@ Public Class MoviePage
             PosterBox.ImageLocation = "C:\Users\alagao\Desktop\posters\Question-mark.png"
             PosterBox.Load()
         End If
-
+        CN.ConnectionString = Globals.connectionPath
         CN.Open()
         CMD.CommandText = "SELECT * FROM dbo.GetReview(@movie_id, @user_id)"
         CMD.Parameters.Add("@movie_id", SqlDbType.Int).Value = Globals.shared_movie.movie_id
@@ -110,6 +112,32 @@ Public Class MoviePage
             ListBox2.SetSelected(0, True)
         End If
         RDR1.Close()
+        ClearConnection()
+        CN.Open()
+
+        CMD.CommandText = "SELECT * FROM dbo.GetCast(@movie_id)"
+        CMD.Parameters.Add("@movie_id", SqlDbType.Int).Value = Globals.shared_movie.movie_id
+        RDR1 = CMD.ExecuteReader
+        While RDR1.Read
+            Dim f As New Filmmaker
+            f.id = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("filmmaker_id")), "", RDR1.Item("filmmaker_id")))
+            If (Not IsDBNull(RDR1.Item("id"))) Then
+                f.user_id = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("id")), "", RDR1.Item("id")))
+            End If
+            f.username = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("username")), "", RDR1.Item("username")))
+            f.fname = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("fname")), "", RDR1.Item("fname")))
+            f.lname = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("lname")), "", RDR1.Item("lname")))
+            f.location = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("location")), "", RDR1.Item("location")))
+            f.biography = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("biography")), "", RDR1.Item("biography")))
+            f.birthdate = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("birthdate")), "", RDR1.Item("birthdate")))
+            f.email = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("email")), "", RDR1.Item("email")))
+            castAndCrewListBox.Items.Add(f)
+
+        End While
+        If castAndCrewListBox.Items.Count > 0 Then
+            castAndCrewListBox.SetSelected(0, True)
+        End If
+        RDR1.Close()
 
     End Sub
 
@@ -125,6 +153,7 @@ Public Class MoviePage
     End Sub
 
 
+
     Private Sub MyRatingTextBox_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles MyRatingTextBox.KeyPress
         If (Microsoft.VisualBasic.Asc(e.KeyChar) < 48) _
                   Or (Microsoft.VisualBasic.Asc(e.KeyChar) > 57) Then
@@ -137,10 +166,7 @@ Public Class MoviePage
 
     Private Sub BackButton_Click(sender As Object, e As EventArgs) Handles BackButton.Click
         Me.Hide()
-        Select Case Globals.lastForm
-            Case "MainForm"
-                MainForm.Show()
-        End Select
+        MainForm.Show()
     End Sub
 
     Private Sub FriendReviewButton_Click(sender As Object, e As EventArgs) Handles FriendsReviewButton.Click
@@ -207,11 +233,50 @@ Public Class MoviePage
             CMD.ExecuteNonQuery()
         Catch ex As System.Data.SqlClient.SqlException
             MessageBox.Show("There was an error when updating your rating.")
-        Return
+            Return
         End Try
         MessageBox.Show("Review updated!")
         MainForm.getContent(sender, e)
         MainForm.focus(False)
     End Sub
 
+    Private Sub castAndCrewListBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles castAndCrewListBox.SelectedIndexChanged
+        Dim fm As New Filmmaker
+        fm = castAndCrewListBox.SelectedItem
+        filmmakerNameTextBox.Text = fm.ToString
+        ClearConnection()
+        CN.Open()
+        CMD.CommandText = "SELECT * FROM dbo.GetRoles(@movie_id,@filmmaker_id)"
+        CMD.Parameters.Add("@movie_id", SqlDbType.Int).Value = Globals.shared_movie.movie_id
+        CMD.Parameters.Add("@filmmaker_id", SqlDbType.Int).Value = fm.id
+        Dim RDR1 = CMD.ExecuteReader
+        filmmakerRoleTextBox.Text = ""
+        While RDR1.Read
+            filmmakerRoleTextBox.Text += RDR1.Item("role_name") & " | "
+        End While
+        RDR1.Close()
+        If String.IsNullOrEmpty(fm.username) Then
+            hasAccountLabel.Hide()
+        Else
+            hasAccountLabel.Show()
+        End If
+    End Sub
+
+    Private Sub SeeProfileButton_Click(sender As Object, e As EventArgs) Handles SeeProfileButton.Click
+        Dim fm As New Filmmaker
+        fm = castAndCrewListBox.SelectedItem
+        filmmakerNameTextBox.Text = fm.ToString
+        ClearConnection()
+        CN.Open()
+        Globals.shared_fm = fm
+        If Not String.IsNullOrEmpty(fm.username) Then
+            Me.Hide()
+            Dim fpage As New FilmmakerUser
+            fpage.Show()
+        Else
+            Me.Hide()
+            FilmmakerUnregisterd.Show()
+        End If
+
+    End Sub
 End Class

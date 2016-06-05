@@ -19,7 +19,7 @@ Public Class MainForm
         Login.Show()
         ListBox2.ScrollAlwaysVisible = True
         ListBox2.HorizontalScrollbar = True
-        ListBox3.Items.Clear()
+
     End Sub
 
     Public Sub getContent(ByVal sender As Object, ByVal e As EventArgs)
@@ -32,8 +32,7 @@ Public Class MainForm
         ListBox1.ScrollAlwaysVisible = True
         ListBox1.HorizontalScrollbar = True
         ListBox2.Items.Clear()
-        ListBox3.ScrollAlwaysVisible = True
-        ListBox3.HorizontalScrollbar = True
+
         ClearConnection()
         CN.Open()
         CMD.CommandText = "SELECT * FROM dbo.GetUsrMovieInfo(@id)"
@@ -78,18 +77,18 @@ Public Class MainForm
         End While
         RDR2.Close()
         ' TODO '
-        CMD.CommandText = "Select * From Filmmaker"
-        Dim RDR3 As SqlDataReader
-        RDR3 = CMD.ExecuteReader
-        While RDR3.Read
-            Dim f As New Filmmaker
-            f.id = RDR3.Item("user_id")
-            f.biography = Convert.ToString(IIf(RDR3.IsDBNull(RDR3.GetOrdinal("biography")), "", RDR3.Item("biography")))
-            f.birthdate = Convert.ToDateTime(IIf(RDR3.IsDBNull(RDR3.GetOrdinal("birthdate")), "", RDR3.Item("birthdate")))
-            ListBox3.Items.Add(f)
-        End While
+        '      CMD.CommandText = "Select * From Filmmaker"
+        '      Dim RDR3 As SqlDataReader
+        '      RDR3 = CMD.ExecuteReader
+        '      While RDR3.Read
+        '      Dim f As New Filmmaker
+        '        f.id = RDR3.Item("user_id")
+        '      f.biography = Convert.ToString(IIf(RDR3.IsDBNull(RDR3.GetOrdinal("biography")), "", RDR3.Item("biography")))
+        '     f.birthdate = Convert.ToDateTime(IIf(RDR3.IsDBNull(RDR3.GetOrdinal("birthdate")), "", RDR3.Item("birthdate")))
+        '    ListBox3.Items.Add(f)
+        '   End While
 
-        RDR3.Close()
+        'RDR3.Close()
         CN.Close()
         If ListBox1.Items.Count > 0 Then
             ListBox1.SelectedIndex = 0
@@ -97,9 +96,7 @@ Public Class MainForm
         If ListBox2.Items.Count > 0 Then
             ListBox2.SelectedIndex = 0
         End If
-        If ListBox3.Items.Count > 0 Then
-            ListBox3.SelectedIndex = 0
-        End If
+
         hideUsr()
         showMovie()
 
@@ -123,12 +120,7 @@ Public Class MainForm
             End If
         End If
     End Sub
-    Private Sub ListBox3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox3.SelectedIndexChanged
-        If ListBox3.SelectedIndex > -1 Then
-            tmpFilmmaker = ListBox3.SelectedItem
-            '          ShowFilmmaker()
-        End If
-    End Sub
+
 
     Private Sub ListBox4_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox4.SelectedIndexChanged
         If ListBox4.SelectedIndex > -1 Then
@@ -138,6 +130,7 @@ Public Class MainForm
             tmpUsr.review = tmpMovieFromFriend.user_review
 
             FriendsRatingBox.Text = tmpMovieFromFriend.user_rating
+            OverallRatingTextBox.Text = tmpMovieFromFriend.avg_rating
             Globals.shared_movie = tmpMovieFromFriend
 
             showMovieFromFriend()
@@ -149,12 +142,6 @@ Public Class MainForm
         If ListBox5.SelectedIndex > -1 Then
             tmpUserFromFriend = ListBox5.SelectedItem
             showUsrFromFriend()
-        End If
-    End Sub
-    Private Sub ListBox6_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox6.SelectedIndexChanged
-        If ListBox6.SelectedIndex > -1 Then
-            tmpFilmmakerFromFriend = ListBox6.SelectedItem
-            '          ShowFilmmaker()
         End If
     End Sub
 
@@ -175,11 +162,7 @@ Public Class MainForm
                 ListBox4.SetSelected(0, True)
             End If
         End If
-        If TabControl1.SelectedIndex = 2 Then
-            If ListBox3.Items.Count > 0 Then
-                ListBox3.SetSelected(0, True)
-            End If
-        End If
+
     End Sub
 
     Private Sub TabControl2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl2.SelectedIndexChanged
@@ -195,11 +178,8 @@ Public Class MainForm
                 ListBox5.SetSelected(0, True)
             End If
         End If
-        If TabControl2.SelectedIndex = 2 Then
-            If ListBox6.Items.Count > 0 Then
-                ListBox6.SetSelected(0, True)
-            End If
-        End If
+
+
     End Sub
 
     Private Sub getUser(ByVal sender As Object, ByVal e As EventArgs)
@@ -346,9 +326,7 @@ Public Class MainForm
         ListBox5.Items.Clear()
         ListBox5.ScrollAlwaysVisible = True
         ListBox5.HorizontalScrollbar = True
-        ListBox6.Items.Clear()
-        ListBox6.ScrollAlwaysVisible = True
-        ListBox6.HorizontalScrollbar = True
+
         CMD.CommandText = "SELECT * FROM GetUsrMovieInfo(@id)"
         CMD.Parameters.Add("@id", SqlDbType.Int).Value = tmpUsr.id
         Dim RDR1 As SqlDataReader
@@ -367,6 +345,7 @@ Public Class MainForm
                 m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
             End If
             m.user_review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
+            m.avg_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("avg_rating")), "", RDR1.Item("avg_rating")))
             ListBox4.Items.Add(m)
         End While
 
@@ -387,19 +366,6 @@ Public Class MainForm
             ListBox5.Items.Add(u)
         End While
         RDR2.Close()
-        'TODO'
-        CMD.CommandText = "Select * From Filmmaker"
-        Dim RDR3 As SqlDataReader
-        RDR3 = CMD.ExecuteReader
-        While RDR3.Read
-            Dim f As New Filmmaker
-            f.id = RDR3.Item("user_id")
-            f.biography = Convert.ToString(IIf(RDR3.IsDBNull(RDR3.GetOrdinal("biography")), "", RDR3.Item("biography")))
-            f.birthdate = Convert.ToDateTime(IIf(RDR3.IsDBNull(RDR3.GetOrdinal("birthdate")), "", RDR3.Item("birthdate")))
-            ListBox6.Items.Add(f)
-        End While
-
-        RDR3.Close()
         CN.Close()
         If ListBox4.Items.Count > 0 Then
             ListBox4.SelectedIndex = 0
@@ -470,7 +436,7 @@ Public Class MainForm
         Login.Show()
         ListBox2.ScrollAlwaysVisible = True
         ListBox2.HorizontalScrollbar = True
-        ListBox3.Items.Clear()
+
     End Sub
 
     Private Sub MyRatingTextBox_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles MyRatingTextBox.KeyPress
@@ -553,4 +519,100 @@ Public Class MainForm
         End If
     End Sub
 
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        If String.IsNullOrEmpty(SearchTextBox.Text) Then
+            MessageBox.Show("Please enter a search term.")
+            Return
+        End If
+        Dim s As New Search
+        s.search_type = SearchComboBox.SelectedItem.ToString
+        s.search_query = SearchTextBox.Text
+        s.Show()
+        Me.Hide()
+    End Sub
+
+    Private Sub SeeProfileButton_Click(sender As Object, e As EventArgs) Handles SeeProfileButton.Click
+        Globals.shared_usr = ListBox2.SelectedItem
+        Dim upage As New User
+        upage.Show()
+        Me.Hide()
+    End Sub
+
+    Private Sub SeeFriendsProfileButton_Click(sender As Object, e As EventArgs) Handles SeeFriendsProfileButton.Click
+        Globals.shared_usr = ListBox5.SelectedItem
+        Dim upage As New User
+        upage.Show()
+        Me.Hide()
+    End Sub
+
+    Private Sub clearFilterButton_Click(sender As Object, e As EventArgs) Handles clearFilterButton.Click
+        ListBox1.Items.Clear()
+        searchFilterBox.Clear()
+        ClearConnection()
+        CN.Open()
+        CMD.CommandText = "SELECT * FROM dbo.GetUsrMovieInfo(@id)"
+        CMD.Parameters.Add("@id", SqlDbType.Int).Value = Globals.user.id
+        ListBox1.Items.Clear()
+        Dim RDR1 As SqlDataReader
+        RDR1 = CMD.ExecuteReader
+        While RDR1.Read
+            Dim m As New Movie
+            m.user_rating = 0
+            m.avg_rating = 0
+            m.movie_id = RDR1.Item("movie_id")
+            m.title = RDR1.Item("title")
+            m.synopsis = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("synopsis")), "", RDR1.Item("synopsis")))
+            m.country = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("country")), "", RDR1.Item("country")))
+            m.poster = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("poster")), "", RDR1.Item("poster")))
+            m.runtime = RDR1.Item("runtime")
+            m.year = RDR1.Item("year")
+            If (Not IsDBNull(RDR1.Item("rating"))) Then
+                m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            End If
+            m.user_review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
+            If (Not IsDBNull(RDR1.Item("rating"))) Then
+                m.avg_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("avg_rating")), "", RDR1.Item("avg_rating")))
+            End If
+            ListBox1.Items.Add(m)
+        End While
+        RDR1.Close()
+    End Sub
+
+    Private Sub filterbutton_Click(sender As Object, e As EventArgs) Handles filterbutton.Click
+        ClearConnection()
+        CN.Open()
+        CMD.CommandText = "SELECT * FROM dbo.Filter(@id, @title)"
+        CMD.Parameters.Add("@id", SqlDbType.Int).Value = Globals.user.id
+        CMD.Parameters.Add("@title", SqlDbType.Text).Value = "%" + searchFilterBox.Text + "%"
+        ListBox1.Items.Clear()
+        Dim RDR1 As SqlDataReader
+        RDR1 = CMD.ExecuteReader
+        While RDR1.Read
+            Dim m As New Movie
+            m.user_rating = 0
+            m.avg_rating = 0
+            m.movie_id = RDR1.Item("movie_id")
+            m.title = RDR1.Item("title")
+            m.synopsis = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("synopsis")), "", RDR1.Item("synopsis")))
+            m.country = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("country")), "", RDR1.Item("country")))
+            m.poster = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("poster")), "", RDR1.Item("poster")))
+            m.runtime = RDR1.Item("runtime")
+            m.year = RDR1.Item("year")
+            If (Not IsDBNull(RDR1.Item("rating"))) Then
+                m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+            End If
+            m.user_review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
+            If (Not IsDBNull(RDR1.Item("rating"))) Then
+                m.avg_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("avg_rating")), "", RDR1.Item("avg_rating")))
+            End If
+            ListBox1.Items.Add(m)
+        End While
+        RDR1.Close()
+    End Sub
+
+    Private Sub MyProfileButton_Click(sender As Object, e As EventArgs) Handles MyProfileButton.Click
+        Globals.shared_usr = Globals.user
+        Dim upage As New User
+        upage.Show()
+    End Sub
 End Class

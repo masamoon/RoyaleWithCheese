@@ -22,8 +22,7 @@ Partial Class User
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Fullname_box = New System.Windows.Forms.TextBox()
+        Me.fnameBox = New System.Windows.Forms.TextBox()
         Me.Username_box = New System.Windows.Forms.TextBox()
         Me.Location_box = New System.Windows.Forms.TextBox()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -38,6 +37,12 @@ Partial Class User
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.lnameBox = New System.Windows.Forms.TextBox()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button3 = New System.Windows.Forms.Button()
+        Me.Button4 = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.Reviews.SuspendLayout()
         Me.Lists.SuspendLayout()
@@ -45,36 +50,26 @@ Partial Class User
         Me.TabPage4.SuspendLayout()
         Me.SuspendLayout()
         '
-        'Label1
+        'fnameBox
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(73, 34)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(39, 13)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Label1"
-        '
-        'Fullname_box
-        '
-        Me.Fullname_box.Enabled = False
-        Me.Fullname_box.Location = New System.Drawing.Point(333, 34)
-        Me.Fullname_box.Name = "Fullname_box"
-        Me.Fullname_box.Size = New System.Drawing.Size(100, 20)
-        Me.Fullname_box.TabIndex = 1
+        Me.fnameBox.Location = New System.Drawing.Point(290, 27)
+        Me.fnameBox.Name = "fnameBox"
+        Me.fnameBox.Size = New System.Drawing.Size(100, 20)
+        Me.fnameBox.TabIndex = 1
         '
         'Username_box
         '
-        Me.Username_box.Enabled = False
-        Me.Username_box.Location = New System.Drawing.Point(333, 60)
+        Me.Username_box.Location = New System.Drawing.Point(290, 77)
         Me.Username_box.Name = "Username_box"
+        Me.Username_box.ReadOnly = True
         Me.Username_box.Size = New System.Drawing.Size(100, 20)
         Me.Username_box.TabIndex = 2
         '
         'Location_box
         '
-        Me.Location_box.Enabled = False
-        Me.Location_box.Location = New System.Drawing.Point(333, 86)
+        Me.Location_box.Location = New System.Drawing.Point(289, 102)
         Me.Location_box.Name = "Location_box"
+        Me.Location_box.ReadOnly = True
         Me.Location_box.Size = New System.Drawing.Size(100, 20)
         Me.Location_box.TabIndex = 3
         '
@@ -84,7 +79,7 @@ Partial Class User
         Me.TabControl1.Controls.Add(Me.Lists)
         Me.TabControl1.Controls.Add(Me.Subscriptions)
         Me.TabControl1.Controls.Add(Me.TabPage4)
-        Me.TabControl1.Location = New System.Drawing.Point(76, 219)
+        Me.TabControl1.Location = New System.Drawing.Point(12, 219)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
         Me.TabControl1.Size = New System.Drawing.Size(366, 203)
@@ -155,7 +150,7 @@ Partial Class User
         Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage4.Size = New System.Drawing.Size(358, 177)
         Me.TabPage4.TabIndex = 3
-        Me.TabPage4.Text = "TabPage4"
+        Me.TabPage4.Text = "Friends"
         Me.TabPage4.UseVisualStyleBackColor = True
         '
         'ListBox4
@@ -169,7 +164,7 @@ Partial Class User
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(265, 86)
+        Me.Label4.Location = New System.Drawing.Point(222, 105)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(48, 13)
         Me.Label4.TabIndex = 18
@@ -178,7 +173,7 @@ Partial Class User
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(265, 60)
+        Me.Label3.Location = New System.Drawing.Point(222, 80)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(55, 13)
         Me.Label3.TabIndex = 17
@@ -187,25 +182,82 @@ Partial Class User
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(265, 34)
+        Me.Label2.Location = New System.Drawing.Point(222, 27)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(35, 13)
+        Me.Label2.Size = New System.Drawing.Size(60, 13)
         Me.Label2.TabIndex = 16
-        Me.Label2.Text = "Name"
+        Me.Label2.Text = "First Name:"
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(222, 53)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(61, 13)
+        Me.Label5.TabIndex = 19
+        Me.Label5.Text = "Last Name:"
+        '
+        'lnameBox
+        '
+        Me.lnameBox.Location = New System.Drawing.Point(289, 51)
+        Me.lnameBox.Name = "lnameBox"
+        Me.lnameBox.Size = New System.Drawing.Size(100, 20)
+        Me.lnameBox.TabIndex = 20
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(386, 314)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(85, 30)
+        Me.Button1.TabIndex = 21
+        Me.Button1.Text = "See details ->"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(305, 146)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(84, 23)
+        Me.Button2.TabIndex = 22
+        Me.Button2.Text = "Update Profile"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
+        'Button3
+        '
+        Me.Button3.Location = New System.Drawing.Point(408, 49)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(75, 48)
+        Me.Button3.TabIndex = 23
+        Me.Button3.Text = "Add as Friend"
+        Me.Button3.UseVisualStyleBackColor = True
+        '
+        'Button4
+        '
+        Me.Button4.Location = New System.Drawing.Point(408, 49)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(75, 48)
+        Me.Button4.TabIndex = 24
+        Me.Button4.Text = "Remove as Friend"
+        Me.Button4.UseVisualStyleBackColor = True
         '
         'User
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(651, 434)
+        Me.ClientSize = New System.Drawing.Size(495, 434)
+        Me.Controls.Add(Me.Button4)
+        Me.Controls.Add(Me.Button3)
+        Me.Controls.Add(Me.Button2)
+        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.lnameBox)
+        Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.Location_box)
         Me.Controls.Add(Me.Username_box)
-        Me.Controls.Add(Me.Fullname_box)
-        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.fnameBox)
         Me.Name = "User"
         Me.Text = "User"
         Me.TabControl1.ResumeLayout(False)
@@ -217,9 +269,7 @@ Partial Class User
         Me.PerformLayout()
 
     End Sub
-
-    Friend WithEvents Label1 As Label
-    Friend WithEvents Fullname_box As TextBox
+    Friend WithEvents fnameBox As TextBox
     Friend WithEvents Username_box As TextBox
     Friend WithEvents Location_box As TextBox
     Friend WithEvents TabControl1 As TabControl
@@ -234,4 +284,10 @@ Partial Class User
     Friend WithEvents Label4 As Label
     Friend WithEvents Label3 As Label
     Friend WithEvents Label2 As Label
+    Friend WithEvents Label5 As Label
+    Friend WithEvents lnameBox As TextBox
+    Friend WithEvents Button1 As Button
+    Friend WithEvents Button2 As Button
+    Friend WithEvents Button3 As Button
+    Friend WithEvents Button4 As Button
 End Class

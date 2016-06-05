@@ -103,6 +103,16 @@ Public Class Movie
         End Set
     End Property
 
+    Private _tmp_rating As Integer
+    Public Property tmp_rating() As Integer
+        Get
+            Return _tmp_rating
+        End Get
+        Set(value As Integer)
+            _tmp_rating = value
+        End Set
+    End Property
+
     Private _user_review As String
     Public Property user_review() As String
         Get

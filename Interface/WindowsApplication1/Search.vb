@@ -3,15 +3,13 @@
 Public Class Search
     Public search_query As String
     Public search_type As String
-
+    Dim CN As New SqlConnection(Globals.connectionPath)
+    Dim CMD As New SqlCommand
     Dim u As New Usr
     Dim f As New Filmmaker
 
     Private Sub Search_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim CN As New SqlConnection(Globals.connectionPath)
-        Dim CMD As New SqlCommand
-
-
+        CN.Open()
 
         CMD.Connection = CN
         If (search_type.Equals("Movies")) Then
@@ -41,14 +39,15 @@ Public Class Search
         CMD.Parameters.Add(New SqlParameter("@user_id", Globals.user.id))
 
 
-        CN.Open()
+
         Dim RDR1 As SqlDataReader
         RDR1 = CMD.ExecuteReader
         While RDR1.Read
-
             If (search_type.Equals("Movies")) Then
 
                 Dim m As New Movie
+                m.user_rating = 0
+                m.tmp_rating = 0
                 m.movie_id = RDR1.Item("movie_id")
                 m.title = RDR1.Item("title")
                 m.synopsis = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("synopsis")), "", RDR1.Item("synopsis")))
@@ -56,8 +55,9 @@ Public Class Search
                 m.poster = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("poster")), "", RDR1.Item("poster")))
                 m.runtime = RDR1.Item("runtime")
                 m.year = RDR1.Item("year")
-                m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+                m.tmp_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
                 m.user_review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
+                m.avg_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("avg_rating")), "", RDR1.Item("avg_rating")))
                 ListBox1.Items.Add(m)
 
             End If
@@ -77,9 +77,17 @@ Public Class Search
             If (search_type.Equals("Filmmakers")) Then
 
                 Dim f As New Filmmaker
-                f.id = RDR1.Item("user_id")
+                f.id = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("filmmaker_id")), "", RDR1.Item("filmmaker_id")))
+                If (Not IsDBNull(RDR1.Item("id"))) Then
+                    f.user_id = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("id")), "", RDR1.Item("id")))
+                End If
+                f.username = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("username")), "", RDR1.Item("username")))
+                f.fname = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("fname")), "", RDR1.Item("fname")))
+                f.lname = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("lname")), "", RDR1.Item("lname")))
+                f.location = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("location")), "", RDR1.Item("location")))
                 f.biography = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("biography")), "", RDR1.Item("biography")))
-                f.birthdate = Convert.ToDateTime(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("birthdate")), "", RDR1.Item("birthdate")))
+                f.birthdate = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("birthdate")), "", RDR1.Item("birthdate")))
+                f.email = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("email")), "", RDR1.Item("email")))
                 ListBox1.Items.Add(f)
             End If
 
@@ -120,6 +128,8 @@ Public Class Search
             While RDR1.Read
                 If (search_type.Equals("Movies")) Then
                     Dim m As Movie = New Movie
+                    m.user_rating = 0
+                    m.tmp_rating = 0
                     m.movie_id = RDR1.Item("movie_id")
                     m.title = RDR1.Item("title")
                     m.synopsis = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("synopsis")), "", RDR1.Item("synopsis")))
@@ -127,8 +137,9 @@ Public Class Search
                     m.poster = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("poster")), "", RDR1.Item("poster")))
                     m.runtime = RDR1.Item("runtime")
                     m.year = RDR1.Item("year")
-                    m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
+                    m.tmp_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
                     m.user_review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
+                    m.avg_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("avg_rating")), "", RDR1.Item("avg_rating")))
                     ListBox1.Items.Add(m)
                 End If
             End While
@@ -165,6 +176,8 @@ Public Class Search
             While RDR1.Read
                 If (search_type.Equals("Movies")) Then
                     Dim m As Movie = New Movie
+                    m.user_rating = 0
+                    m.tmp_rating = 0
                     m.movie_id = RDR1.Item("movie_id")
                     m.title = RDR1.Item("title")
                     m.synopsis = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("synopsis")), "", RDR1.Item("synopsis")))
@@ -174,6 +187,7 @@ Public Class Search
                     m.year = RDR1.Item("year")
                     m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
                     m.user_review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
+                    m.avg_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("avg_rating")), "", RDR1.Item("avg_rating")))
                     ListBox1.Items.Add(m)
                 End If
                 If (search_type.Equals("Users")) Then
@@ -221,6 +235,8 @@ Public Class Search
             While RDR1.Read
                 If (search_type.Equals("Movies")) Then
                     Dim m As Movie = New Movie
+                    m.tmp_rating = 0
+                    m.user_rating = 0
                     m.movie_id = RDR1.Item("movie_id")
                     m.title = RDR1.Item("title")
                     m.synopsis = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("synopsis")), "", RDR1.Item("synopsis")))
@@ -230,6 +246,7 @@ Public Class Search
                     m.year = RDR1.Item("year")
                     m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
                     m.user_review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
+                    m.avg_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("avg_rating")), "", RDR1.Item("avg_rating")))
                     ListBox1.Items.Add(m)
                 End If
                 If (search_type.Equals("Users")) Then
@@ -276,6 +293,8 @@ Public Class Search
             While RDR1.Read
                 If (search_type.Equals("Movies")) Then
                     Dim m As New Movie
+                    m.user_rating = 0
+                    m.tmp_rating = 0
                     m.movie_id = RDR1.Item("movie_id")
                     m.title = RDR1.Item("title")
                     m.synopsis = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("synopsis")), "", RDR1.Item("synopsis")))
@@ -285,6 +304,7 @@ Public Class Search
                     m.year = RDR1.Item("year")
                     m.user_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("rating")), "", RDR1.Item("rating")))
                     m.user_review = Convert.ToString(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("body")), "", RDR1.Item("body")))
+                    m.avg_rating = Convert.ToInt16(IIf(RDR1.IsDBNull(RDR1.GetOrdinal("avg_rating")), "", RDR1.Item("avg_rating")))
                     ListBox1.Items.Add(m)
 
                 End If
@@ -316,14 +336,33 @@ Public Class Search
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         If (search_type.Equals("Movies")) Then
             Globals.shared_movie = ListBox1.SelectedItem
-            MoviePage.Show()
+            Me.Close()
+            MainForm.Hide()
+            Dim mpage As New MoviePage
+            mpage.Show()
         End If
         If (search_type.Equals("Users")) Then
             Globals.shared_usr = ListBox1.SelectedItem
-            User.Show()
+            Dim upage As New User
+            upage.Show()
         End If
         If (search_type.Equals("Filmmakers")) Then
-            Globals.shared_movie = ListBox1.SelectedItem
+            Globals.shared_fm = ListBox1.SelectedItem
+            If String.IsNullOrEmpty(Globals.shared_fm.username) Then
+                Dim fpage As New FilmmakerUnregisterd
+                fpage.Show()
+                Me.Hide()
+            Else
+                Dim fpage As New FilmmakerUser
+                fpage.Show()
+                Me.Hide()
+            End If
         End If
     End Sub
+
+    Private Sub Search_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
+        MainForm.Show()
+        Me.Hide()
+    End Sub
+
 End Class
