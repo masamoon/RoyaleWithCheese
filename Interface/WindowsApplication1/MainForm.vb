@@ -76,19 +76,6 @@ Public Class MainForm
             ListBox2.Items.Add(u)
         End While
         RDR2.Close()
-        ' TODO '
-        '      CMD.CommandText = "Select * From Filmmaker"
-        '      Dim RDR3 As SqlDataReader
-        '      RDR3 = CMD.ExecuteReader
-        '      While RDR3.Read
-        '      Dim f As New Filmmaker
-        '        f.id = RDR3.Item("user_id")
-        '      f.biography = Convert.ToString(IIf(RDR3.IsDBNull(RDR3.GetOrdinal("biography")), "", RDR3.Item("biography")))
-        '     f.birthdate = Convert.ToDateTime(IIf(RDR3.IsDBNull(RDR3.GetOrdinal("birthdate")), "", RDR3.Item("birthdate")))
-        '    ListBox3.Items.Add(f)
-        '   End While
-
-        'RDR3.Close()
         CN.Close()
         If ListBox1.Items.Count > 0 Then
             ListBox1.SelectedIndex = 0
@@ -532,6 +519,11 @@ Public Class MainForm
     End Sub
 
     Private Sub SeeProfileButton_Click(sender As Object, e As EventArgs) Handles SeeProfileButton.Click
+        If ListBox2.Items.Count <= 0 Then
+            MessageBox.Show("No item selected!")
+            Return
+        End If
+
         Globals.shared_usr = ListBox2.SelectedItem
         Dim upage As New User
         upage.Show()
@@ -539,6 +531,10 @@ Public Class MainForm
     End Sub
 
     Private Sub SeeFriendsProfileButton_Click(sender As Object, e As EventArgs) Handles SeeFriendsProfileButton.Click
+        If ListBox5.Items.Count <= 0 Then
+            MessageBox.Show("No item selected!")
+            Return
+        End If
         Globals.shared_usr = ListBox5.SelectedItem
         Dim upage As New User
         upage.Show()
@@ -614,5 +610,6 @@ Public Class MainForm
         Globals.shared_usr = Globals.user
         Dim upage As New User
         upage.Show()
+        Me.Hide()
     End Sub
 End Class

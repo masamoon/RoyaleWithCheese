@@ -49,12 +49,14 @@ Partial Class FilmmakerUser
         Me.RewardLabel = New System.Windows.Forms.Label()
         Me.UpdateRewardButton = New System.Windows.Forms.Button()
         Me.UnsubscribeButton = New System.Windows.Forms.Button()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.TabControl1.SuspendLayout()
         Me.Reviews.SuspendLayout()
         Me.Lists.SuspendLayout()
         Me.Subscriptions.SuspendLayout()
         Me.TabPage4.SuspendLayout()
         Me.Roles.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -307,11 +309,22 @@ Partial Class FilmmakerUser
         Me.UnsubscribeButton.Text = "Unsubscribe"
         Me.UnsubscribeButton.UseVisualStyleBackColor = True
         '
+        'PictureBox1
+        '
+        Me.PictureBox1.Image = Global.WindowsApplication1.My.Resources.Resources.usr_jpg
+        Me.PictureBox1.Location = New System.Drawing.Point(124, 46)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(100, 124)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.PictureBox1.TabIndex = 27
+        Me.PictureBox1.TabStop = False
+        '
         'FilmmakerUser
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(580, 554)
+        Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.UnsubscribeButton)
         Me.Controls.Add(Me.UpdateRewardButton)
         Me.Controls.Add(Me.RewardLabel)
@@ -329,6 +342,8 @@ Partial Class FilmmakerUser
         Me.Controls.Add(Me.Username_box)
         Me.Controls.Add(Me.Fullname_box)
         Me.Controls.Add(Me.TabControl1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.MaximizeBox = False
         Me.Name = "FilmmakerUser"
         Me.Text = "FilmmakerUser"
         Me.TabControl1.ResumeLayout(False)
@@ -337,6 +352,7 @@ Partial Class FilmmakerUser
         Me.Subscriptions.ResumeLayout(False)
         Me.TabPage4.ResumeLayout(False)
         Me.Roles.ResumeLayout(False)
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -369,4 +385,5 @@ Partial Class FilmmakerUser
     Friend WithEvents RewardLabel As Label
     Friend WithEvents UpdateRewardButton As Button
     Friend WithEvents UnsubscribeButton As Button
+    Friend WithEvents PictureBox1 As PictureBox
 End Class

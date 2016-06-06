@@ -24,6 +24,11 @@ WindowsApplication1
 </member>
 <member name="P:WindowsApplication1.My.Resources.Resources.countries">
 <summary>
+  Looks up a localized string similar to .
+</summary>
+</member>
+<member name="P:WindowsApplication1.My.Resources.Resources.countries1">
+<summary>
   Looks up a localized string similar to Afghanistan  
 Albania  
 Algeria  
@@ -66,12 +71,7 @@ Chile
 Ch [rest of string was truncated]&quot;;.
 </summary>
 </member>
-<member name="P:WindowsApplication1.My.Resources.Resources.interstellar">
-<summary>
-  Looks up a localized resource of type System.Drawing.Bitmap.
-</summary>
-</member>
-<member name="P:WindowsApplication1.My.Resources.Resources.pulpfiction">
+<member name="P:WindowsApplication1.My.Resources.Resources.usr_jpg">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>

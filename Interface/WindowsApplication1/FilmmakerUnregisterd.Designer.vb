@@ -34,9 +34,11 @@ Partial Class FilmmakerUnregisterd
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.ListBox5 = New System.Windows.Forms.ListBox()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.TabControl1.SuspendLayout()
         Me.Participations.SuspendLayout()
         Me.TabPage1.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Label5
@@ -149,11 +151,22 @@ Partial Class FilmmakerUnregisterd
         Me.Button1.Text = "See Details ->"
         Me.Button1.UseVisualStyleBackColor = True
         '
+        'PictureBox1
+        '
+        Me.PictureBox1.Image = Global.WindowsApplication1.My.Resources.Resources.usr_jpg
+        Me.PictureBox1.Location = New System.Drawing.Point(63, 35)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(100, 124)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.PictureBox1.TabIndex = 29
+        Me.PictureBox1.TabStop = False
+        '
         'FilmmakerUnregisterd
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(537, 544)
+        Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label2)
@@ -162,11 +175,14 @@ Partial Class FilmmakerUnregisterd
         Me.Controls.Add(Me.Bio)
         Me.Controls.Add(Me.Fullname_box)
         Me.Controls.Add(Me.TabControl1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.MaximizeBox = False
         Me.Name = "FilmmakerUnregisterd"
         Me.Text = "FilmmakerUnregisterd"
         Me.TabControl1.ResumeLayout(False)
         Me.Participations.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -184,4 +200,5 @@ Partial Class FilmmakerUnregisterd
     Friend WithEvents TabPage1 As TabPage
     Friend WithEvents ListBox5 As ListBox
     Friend WithEvents Button1 As Button
+    Friend WithEvents PictureBox1 As PictureBox
 End Class

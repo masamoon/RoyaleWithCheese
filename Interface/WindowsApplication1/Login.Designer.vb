@@ -71,6 +71,8 @@ Partial Class Login
         Me.Controls.Add(Me.LoginButton)
         Me.Controls.Add(Me.UsernameBox)
         Me.Controls.Add(Me.UsernameLabel)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.MaximizeBox = False
         Me.Name = "Login"
         Me.Text = "Form1"
         Me.ResumeLayout(False)

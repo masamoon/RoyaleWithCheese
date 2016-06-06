@@ -84,7 +84,8 @@ Public Class FilmmakerUnregisterd
 
     Public Sub FilmmakerUnregisterd_FormClosed(ByVal sender As Object, ByVal e As EventArgs) Handles Me.FormClosed
         Me.Hide()
-        MainForm.Show()
+        Dim m As New MainForm
+        m.Show()
     End Sub
 
 

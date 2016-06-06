@@ -23,7 +23,8 @@ Public Class Login
                     MsgBox("Invalid username!")
                 Else
                     Globals.user.username = UsernameBox.Text
-                    MainForm.Show()
+                    Dim m As New MainForm
+                    m.Show()
                     Me.Hide()
                 End If
             End If

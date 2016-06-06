@@ -391,6 +391,8 @@ Partial Class MoviePage
         Me.Controls.Add(Me.synbioTextBox)
         Me.Controls.Add(Me.yearLabel)
         Me.Controls.Add(Me.nameLabel)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.MaximizeBox = False
         Me.Name = "MoviePage"
         Me.Text = "Royale With Cheese"
         CType(Me.PosterBox, System.ComponentModel.ISupportInitialize).EndInit()

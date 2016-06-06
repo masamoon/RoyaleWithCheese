@@ -43,11 +43,14 @@ Partial Class User
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.TabControl1.SuspendLayout()
         Me.Reviews.SuspendLayout()
         Me.Lists.SuspendLayout()
         Me.Subscriptions.SuspendLayout()
         Me.TabPage4.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'fnameBox
@@ -215,7 +218,7 @@ Partial Class User
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(305, 146)
+        Me.Button2.Location = New System.Drawing.Point(271, 128)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(84, 23)
         Me.Button2.TabIndex = 22
@@ -240,11 +243,33 @@ Partial Class User
         Me.Button4.Text = "Remove as Friend"
         Me.Button4.UseVisualStyleBackColor = True
         '
+        'Button5
+        '
+        Me.Button5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button5.Location = New System.Drawing.Point(408, 172)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(75, 38)
+        Me.Button5.TabIndex = 25
+        Me.Button5.Text = "Delete Account"
+        Me.Button5.UseVisualStyleBackColor = True
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.Image = Global.WindowsApplication1.My.Resources.Resources.usr_jpg
+        Me.PictureBox1.Location = New System.Drawing.Point(53, 39)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(100, 124)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.PictureBox1.TabIndex = 26
+        Me.PictureBox1.TabStop = False
+        '
         'User
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(495, 434)
+        Me.Controls.Add(Me.PictureBox1)
+        Me.Controls.Add(Me.Button5)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
@@ -258,6 +283,8 @@ Partial Class User
         Me.Controls.Add(Me.Location_box)
         Me.Controls.Add(Me.Username_box)
         Me.Controls.Add(Me.fnameBox)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.MaximizeBox = False
         Me.Name = "User"
         Me.Text = "User"
         Me.TabControl1.ResumeLayout(False)
@@ -265,6 +292,7 @@ Partial Class User
         Me.Lists.ResumeLayout(False)
         Me.Subscriptions.ResumeLayout(False)
         Me.TabPage4.ResumeLayout(False)
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -290,4 +318,6 @@ Partial Class User
     Friend WithEvents Button2 As Button
     Friend WithEvents Button3 As Button
     Friend WithEvents Button4 As Button
+    Friend WithEvents Button5 As Button
+    Friend WithEvents PictureBox1 As PictureBox
 End Class

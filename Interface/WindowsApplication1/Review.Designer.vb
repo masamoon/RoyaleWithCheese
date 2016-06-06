@@ -121,6 +121,8 @@ Partial Class Review
         Me.Controls.Add(Me.ratingTextBox)
         Me.Controls.Add(Me.yearLabel)
         Me.Controls.Add(Me.nameLabel)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.MaximizeBox = False
         Me.Name = "Review"
         Me.Text = "Review"
         Me.ResumeLayout(False)

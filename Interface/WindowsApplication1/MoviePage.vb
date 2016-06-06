@@ -16,6 +16,7 @@ Public Class MoviePage
     Public Sub MoviePage_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
         CN = New SqlConnection(Globals.connectionPath)
         CMD = New SqlCommand
+        hasAccountLabel.Hide()
         CMD.Connection = CN
         getContent(sender, e)
         synbioTextBox.SelectionLength = 0
@@ -29,7 +30,8 @@ Public Class MoviePage
         Me.Hide()
         Select Case Globals.lastForm
             Case "MainForm"
-                MainForm.Show()
+                Dim m As New MainForm
+                m.Show()
         End Select
     End Sub
 
@@ -49,6 +51,7 @@ Public Class MoviePage
             PosterBox.Load()
         Else
             PosterBox.ImageLocation = Globals.working_directory + "\posters\Question-mark.png"
+            PosterBox.SizeMode = PictureBoxSizeMode.StretchImage
             PosterBox.Load()
         End If
         CN.ConnectionString = Globals.connectionPath
@@ -166,7 +169,8 @@ Public Class MoviePage
 
     Private Sub BackButton_Click(sender As Object, e As EventArgs) Handles BackButton.Click
         Me.Hide()
-        MainForm.Show()
+        Dim m As New MainForm
+        m.Show()
     End Sub
 
     Private Sub FriendReviewButton_Click(sender As Object, e As EventArgs) Handles FriendsReviewButton.Click
@@ -232,7 +236,7 @@ Public Class MoviePage
         Try
             CMD.ExecuteNonQuery()
         Catch ex As System.Data.SqlClient.SqlException
-            MessageBox.Show("There was an error when updating your rating.")
+            MessageBox.Show("There was an error when updating your review. Maybe the text is too short.")
             Return
         End Try
         MessageBox.Show("Review updated!")
@@ -265,6 +269,10 @@ Public Class MoviePage
     Private Sub SeeProfileButton_Click(sender As Object, e As EventArgs) Handles SeeProfileButton.Click
         Dim fm As New Filmmaker
         fm = castAndCrewListBox.SelectedItem
+        If castAndCrewListBox.SelectedItem Is Nothing Then
+            MessageBox.Show("No item selected!")
+            Return
+        End If
         filmmakerNameTextBox.Text = fm.ToString
         ClearConnection()
         CN.Open()

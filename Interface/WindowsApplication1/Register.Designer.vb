@@ -164,6 +164,8 @@ Partial Class Register
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.MaximizeBox = False
         Me.Name = "Register"
         Me.Text = "Register"
         Me.ResumeLayout(False)

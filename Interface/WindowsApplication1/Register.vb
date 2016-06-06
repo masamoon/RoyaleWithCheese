@@ -127,7 +127,8 @@ Public Class Register
         Dim file As String
         Dim arr() As String
         Dim count As Integer
-        file = My.Resources.countries
+        Dim tr As IO.TextReader = New IO.StreamReader(Globals.working_directory & "\files\countries.txt")
+        file = tr.ReadToEnd
         arr = file.Split(Environment.NewLine)
         For count = 0 To arr.Length - 1
             ComboBox1.Items.Add(arr(count))

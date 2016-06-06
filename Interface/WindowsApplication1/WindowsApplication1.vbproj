@@ -167,7 +167,7 @@
       <DependentUpon>MoviePage.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
-      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -201,13 +201,10 @@
     <Folder Include="Posters\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\interstellar.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\pulpfiction.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\countries.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\usr.jpg.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

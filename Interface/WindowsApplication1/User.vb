@@ -153,11 +153,13 @@ Public Class User
             Button2.Show()
             Button3.Hide()
             Button4.Hide()
+            Button5.Show()
 
         Else
             fnameBox.ReadOnly = True
             lnameBox.ReadOnly = True
             Button2.Hide()
+            Button5.Hide()
         End If
 
 
@@ -222,14 +224,27 @@ Public Class User
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        ClearConnection()
+        CN.Open()
+        CMD.CommandText = "EXEC dbo.pr_UpdateUsrInfo @fname = @fname2, @lname = @lname2, @uid = @uid2"
+        CMD.Parameters.Add(New SqlParameter("@fname2", fnameBox.Text))
+        CMD.Parameters.Add(New SqlParameter("@lname2", lnameBox.Text))
+        CMD.Parameters.Add(New SqlParameter("@uid2", Globals.user.id))
 
+        Try
+            CMD.ExecuteNonQuery()
+        Catch ex As System.Data.SqlClient.SqlException
+            MessageBox.Show("There was an error when updating your profile.")
+            Return
+        End Try
+        MessageBox.Show("Profile updated!")
+        MainForm.getContent(sender, e)
+        MainForm.focus(False)
+        Me.Hide()
+        MainForm.Show()
     End Sub
 
-    Private Sub Button3_Click(sender As Object, e As EventArgs)
-
-    End Sub
-
-    Private Sub Button3_Click_1(sender As Object, e As EventArgs) Handles Button3.Click
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         ClearConnection()
         CN.Open()
         CMD.CommandText = "EXEC dbo.pr_AddFriend @uid = @uid2, @fid = @fid2"
@@ -265,5 +280,28 @@ Public Class User
         MainForm.focus(False)
         Me.Hide()
         MainForm.Show()
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        If MessageBox.Show("You will lose all your data. Are you sure you want to delete your account?", "Delete account?", MessageBoxButtons.YesNo) = DialogResult.No Then
+            Return
+        Else
+            ClearConnection()
+            CN.Open()
+            CMD.CommandText = "EXEC dbo.pr_DelUsr @uid = @uid2"
+            CMD.Parameters.Add(New SqlParameter("@uid2", Globals.user.id))
+            Try
+                CMD.ExecuteNonQuery()
+            Catch ex As System.Data.SqlClient.SqlException
+                MessageBox.Show("There was an error deleting this person from your friendlist.")
+                Return
+            End Try
+            MessageBox.Show("Account deleted!")
+            MainForm.getContent(sender, e)
+            MainForm.focus(False)
+            Me.Hide()
+            Dim log As New Login
+            log.Show()
+        End If
     End Sub
 End Class

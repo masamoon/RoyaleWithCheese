@@ -83,6 +83,8 @@ Partial Class Search
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.ListBox1)
         Me.Controls.Add(Me.GroupBox1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.MaximizeBox = False
         Me.Name = "Search"
         Me.Text = "Search"
         Me.GroupBox1.ResumeLayout(False)

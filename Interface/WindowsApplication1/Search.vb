@@ -334,6 +334,10 @@ Public Class Search
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        If ListBox1.Items.Count <= 0 Then
+            MessageBox.Show("No item selected!")
+            Return
+        End If
         If (search_type.Equals("Movies")) Then
             Globals.shared_movie = ListBox1.SelectedItem
             Me.Close()
@@ -345,6 +349,7 @@ Public Class Search
             Globals.shared_usr = ListBox1.SelectedItem
             Dim upage As New User
             upage.Show()
+            Me.Hide()
         End If
         If (search_type.Equals("Filmmakers")) Then
             Globals.shared_fm = ListBox1.SelectedItem

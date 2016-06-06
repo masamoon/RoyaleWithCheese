@@ -512,6 +512,8 @@ Partial Class MainForm
         Me.Controls.Add(Me.PosterBox)
         Me.Controls.Add(Me.heyLabel)
         Me.Controls.Add(Me.TabControl1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.MaximizeBox = False
         Me.Name = "MainForm"
         Me.Text = "Royale With Cheese"
         Me.TabControl1.ResumeLayout(False)

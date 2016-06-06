@@ -239,8 +239,8 @@ Public Class FilmmakerUser
 
     Public Sub FilmmakerUser_FormClosed(ByVal sender As Object, ByVal e As EventArgs) Handles Me.FormClosed
         Me.Hide()
-        MainForm.Show()
-
+        Dim m As New MainForm
+        m.Show()
     End Sub
 
     Private Sub SubscribeButton_Click(sender As Object, e As EventArgs) Handles SubscribeButton.Click
@@ -260,7 +260,8 @@ Public Class FilmmakerUser
         MainForm.focus(True)
         Me.Hide()
         MessageBox.Show("Subsctiption successful!")
-        MainForm.Show()
+        Dim m As New MainForm
+        m.Show()
     End Sub
 
     Private Sub UnsubscribeButton_Click(sender As Object, e As EventArgs) Handles UnsubscribeButton.Click
@@ -279,7 +280,8 @@ Public Class FilmmakerUser
         MainForm.focus(True)
         Me.Hide()
         MessageBox.Show("Unsubsctiption successful!")
-        MainForm.Show()
+        Dim m As New MainForm
+        m.Show()
     End Sub
 
     Private Sub UpdateRewardButton_Click(sender As Object, e As EventArgs) Handles UpdateRewardButton.Click
@@ -299,6 +301,7 @@ Public Class FilmmakerUser
         MainForm.focus(True)
         Me.Hide()
         MessageBox.Show("Reward updated!")
-        MainForm.Show()
+        Dim m As New MainForm
+        m.Show()
     End Sub
 End Class
